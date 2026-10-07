@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { api } from "./api";
-// Pages
+
 import Auth from "./pages/Auth";
 import PesquisarMateriais from "./pages/PesquisarMateriais";
 import RegistrarEntrada from "./pages/RegistrarEntrada";
@@ -12,7 +12,7 @@ import DistribuicaoEstoque from "./pages/DistribuicaoEstoque";
 import HistoricoMovimentacoes from "./pages/HistoricoMovimentacoes";
 import ChatbotWhatsApp from "./pages/ChatbotWhatsApp";
 import { fmtCodigo, descMov } from "./constants";
-// ── Icons ─────────────────────────────────────────────────────────────
+
 const IconBox = () => (<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
     <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
   </svg>);
@@ -72,6 +72,7 @@ const IconMenu = () => (<svg width="22" height="22" viewBox="0 0 24 24" fill="no
 const IconX = () => (<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
     <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
   </svg>);
+
 const navItems = [
     { id: "painel", label: "Painel Geral", icon: <IconBox />, section: "ESTOQUE" },
     { id: "pesquisar", label: "Pesquisar Materiais", icon: <IconSearch /> },
@@ -82,9 +83,10 @@ const navItems = [
     { id: "historico", label: "Histórico de Movimentações", icon: <IconHistory /> },
     { id: "chatbot", label: "Chatbot WhatsApp", icon: <IconWhatsApp />, section: "ATENDIMENTO" },
 ];
-// ── Static data ────────────────────────────────────────────────────────
+
 const MARBLE_HERO = "https://images.unsplash.com/photo-1770065805058-3bfed55e23ee?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=1080";
 const MARBLE_SMALL = "https://images.unsplash.com/photo-1558346648-9757f2fa4474?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=400";
+
 const tipoBadge = (tipo) => {
     if (tipo === "Entrada")
         return <span className="px-2.5 py-0.5 rounded-full text-xs font-medium whitespace-nowrap" style={{ background: "#d1fae5", color: "#065f46" }}>Entrada</span>;
@@ -92,12 +94,13 @@ const tipoBadge = (tipo) => {
         return <span className="px-2.5 py-0.5 rounded-full text-xs font-medium whitespace-nowrap" style={{ background: "#fee2e2", color: "#991b1b" }}>Saída</span>;
     return <span className="px-2.5 py-0.5 rounded-full text-xs font-medium whitespace-nowrap" style={{ background: "#f3f4f6", color: "#374151" }}>Transfer.</span>;
 };
-// ── Sidebar nav list (shared between desktop aside + mobile drawer) ────
+
 const iniciais = (n) => (n || "?").split(" ").filter(Boolean).slice(0, 2).map((p) => p[0].toUpperCase()).join("");
+
 function NavList({ activeNav, setActiveNav, onSelect, onLogout, user, }) {
     const handle = (id) => { setActiveNav(id); onSelect?.(); };
+
     return (<>
-      {/* Logo */}
       <div className="px-6 pt-8 pb-6">
         <div className="flex items-center gap-3 mb-1">
           <div className="w-10 h-10 flex items-center justify-center rounded flex-shrink-0" style={{ background: "rgba(255,255,255,0.12)" }}>
@@ -116,7 +119,6 @@ function NavList({ activeNav, setActiveNav, onSelect, onLogout, user, }) {
         </div>
       </div>
 
-      {/* Nav */}
       <nav className="flex-1 px-3 overflow-y-auto">
         {navItems.map((item) => (<div key={item.id}>
             {item.section && (<div className="text-[10px] tracking-widest uppercase font-semibold px-3 mt-5 mb-2" style={{ color: "rgba(255,255,255,0.38)" }}>
@@ -131,11 +133,10 @@ function NavList({ activeNav, setActiveNav, onSelect, onLogout, user, }) {
           </div>))}
       </nav>
 
-      {/* User */}
       <div className="px-4 py-5 border-t" style={{ borderColor: "rgba(255,255,255,0.1)" }}>
         <div className="flex items-center gap-3 mb-3">
           <div className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0" style={{ background: "#c9976e", color: "#fff" }}>
-{iniciais(user?.nome)}
+            {iniciais(user?.nome)}
           </div>
           <div>
             <div className="text-sm font-medium" style={{ color: "#f0e4d4" }}>{user?.nome}</div>
@@ -149,28 +150,32 @@ function NavList({ activeNav, setActiveNav, onSelect, onLogout, user, }) {
       </div>
     </>);
 }
-// ── Painel Geral ───────────────────────────────────────────────────────
+
 function PainelGeral({ navigate }) {
     const [dados, setDados] = useState(null);
+
     useEffect(() => {
         api("painel").then(setDados).catch(() => { });
     }, []);
+
     const c = dados?.cards || {};
     const movements = dados?.ultimasMovimentacoes || [];
+
     const statCards = [
         { icon: <IconBox />, label: "TOTAL DE SKUS", value: String(c.totalSkus ?? "—"), sub: "materiais cadastrados", color: "#5c1a22", alert: false },
         { icon: <IconDown />, label: "ENTRADAS HOJE", value: String(c.entradasHoje ?? "—"), sub: "registradas hoje", color: "#5c1a22", alert: false },
         { icon: <IconUp />, label: "SAÍDAS HOJE", value: String(c.saidasHoje ?? "—"), sub: `para ${c.obrasHoje ?? 0} obras distintas`, color: "#5c1a22", alert: false },
         { icon: <IconAlert />, label: "SALDO BAIXO", value: String(c.saldoBaixo ?? "—"), sub: "abaixo do mínimo", color: "#c0392b", alert: true },
     ];
+
     const acoes = [
         { label: "Registrar Entrada", icon: <IconDown />, id: "entrada", active: true },
         { label: "Registrar Saída", icon: <IconUp />, id: "saida", active: false },
         { label: "Pesquisar Material", icon: <IconSearch />, id: "pesquisar", active: false },
         { label: "Transferência", icon: <IconTransfer />, id: "transferencia", active: false },
     ];
+
     return (<>
-      {/* ── Desktop header with marble bg ── */}
       <header className="painel-header-desktop relative items-end justify-between overflow-hidden" style={{ minHeight: "140px" }}>
         <div className="absolute right-0 top-0 h-full" style={{
             width: "55%",
@@ -203,19 +208,13 @@ function PainelGeral({ navigate }) {
         </div>
       </header>
 
-      {/* ── Mobile header (simple) ── */}
       <div className="painel-header-mobile px-4 pt-4 pb-3">
         <h1 className="text-xl font-bold" style={{ color: "#1c0a0d" }}>Painel Geral</h1>
         <p className="text-xs mt-0.5" style={{ color: "#7a5c60" }}>Resumo das movimentações do dia</p>
       </div>
 
-      {/* ── Content ── */}
       <div className="flex-1 overflow-y-auto painel-content-padding painel-content-flex">
-
-        {/* Left column */}
         <div className="painel-left flex flex-col gap-5">
-
-          {/* Stat cards — 2 col on mobile, 4 col on desktop */}
           <div className="painel-stat-grid">
             {statCards.map((card) => (<div key={card.label} className="rounded-2xl p-4 flex flex-col gap-3" style={{ background: "#fff" }}>
                 <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: card.alert ? "#fee2e2" : "#f5f0eb", color: card.color }}>
@@ -233,7 +232,6 @@ function PainelGeral({ navigate }) {
               </div>))}
           </div>
 
-          {/* Movimentações */}
           <div className="rounded-2xl" style={{ background: "#fff" }}>
             <div className="flex items-center justify-between px-4 py-4 border-b" style={{ borderColor: "#f5f0eb" }}>
               <div className="flex items-center gap-2">
@@ -247,7 +245,6 @@ function PainelGeral({ navigate }) {
               </button>
             </div>
 
-            {/* Desktop table */}
             <div className="painel-mov-table">
               <table className="w-full">
                 <thead>
@@ -270,7 +267,6 @@ function PainelGeral({ navigate }) {
               </table>
             </div>
 
-            {/* Mobile cards */}
             <div className="painel-mov-cards flex flex-col">
               {movements.map((row, i) => (<div key={i} className="px-4 py-3 flex items-center justify-between gap-3" style={{ borderBottom: i < movements.length - 1 ? "1px solid #f9f6f3" : "none" }}>
                   <div className="flex items-center gap-3 min-w-0">
@@ -283,7 +279,6 @@ function PainelGeral({ navigate }) {
             </div>
           </div>
 
-          {/* Quote */}
           <div className="flex items-start gap-3">
             <div className="w-1 rounded-full flex-shrink-0 mt-1" style={{ background: "#c9976e", height: "36px" }}/>
             <div>
@@ -293,9 +288,7 @@ function PainelGeral({ navigate }) {
           </div>
         </div>
 
-        {/* Right column */}
         <div className="painel-right flex flex-col gap-4">
-          {/* Ações Rápidas */}
           <div className="rounded-2xl p-5" style={{ background: "#fff" }}>
             <div className="flex items-center gap-2 mb-4">
               <span style={{ color: "#c9976e" }}><IconFlash /></span>
@@ -311,7 +304,6 @@ function PainelGeral({ navigate }) {
             </div>
           </div>
 
-          {/* Materiais Críticos */}
           <div className="rounded-2xl p-5 relative overflow-hidden" style={{ background: "#fff" }}>
             <div className="absolute bottom-0 right-0 w-24 h-24 rounded-tl-2xl overflow-hidden" style={{ backgroundImage: `url(${MARBLE_SMALL})`, backgroundSize: "cover", backgroundPosition: "center", opacity: 0.35 }}/>
             <div className="relative z-10">
@@ -338,7 +330,7 @@ function PainelGeral({ navigate }) {
       </div>
     </>);
 }
-// ── Page title map ─────────────────────────────────────────────────────
+
 const pageTitles = {
     pesquisar: { title: "Pesquisar Materiais", sub: "Consulte e filtre materiais do estoque" },
     entrada: { title: "Registrar Entrada", sub: "Adicione materiais ao estoque" },
@@ -348,12 +340,13 @@ const pageTitles = {
     historico: { title: "Histórico de Movimentações", sub: "Registro completo de movimentações" },
     chatbot: { title: "Chatbot WhatsApp", sub: "Simulação do fluxo de pré-atendimento" },
 };
-// ── App ────────────────────────────────────────────────────────────────
+
 export default function App() {
     const [user, setUser] = useState(null);
     const [checking, setChecking] = useState(true);
     const [activeNav, setActiveNav] = useState("painel");
     const [drawerOpen, setDrawerOpen] = useState(false);
+
     useEffect(() => {
         if (!localStorage.getItem("token")) {
             setChecking(false);
@@ -361,26 +354,24 @@ export default function App() {
         }
         api("me").then(setUser).catch(() => localStorage.removeItem("token")).finally(() => setChecking(false));
     }, []);
+
     if (checking)
         return null;
+
     if (!user)
         return <Auth onAuth={setUser}/>;
+
     const navigate = (id) => setActiveNav(id);
     const logout = () => { localStorage.removeItem("token"); setUser(null); setActiveNav("painel"); };
-    return (<div className="flex h-screen overflow-hidden font-sans" style={{ background: "#f5f0eb" }}>
 
-      {/* ══ Desktop sidebar (hidden on mobile) ══ */}
+    return (<div className="flex h-screen overflow-hidden font-sans" style={{ background: "#f5f0eb" }}>
       <aside className="hidden lg:flex flex-col w-64 flex-shrink-0 h-full overflow-y-auto" style={{ background: "#5c1a22", color: "#fff" }}>
         <NavList activeNav={activeNav} setActiveNav={navigate} onLogout={logout} user={user}/>
       </aside>
 
-      {/* ══ Mobile drawer overlay ══ */}
       {drawerOpen && (<div className="lg:hidden fixed inset-0 z-40 flex">
-          {/* Backdrop */}
           <div className="absolute inset-0" style={{ background: "rgba(28,10,13,0.55)", backdropFilter: "blur(2px)" }} onClick={() => setDrawerOpen(false)}/>
-          {/* Drawer */}
           <div className="relative z-50 flex flex-col w-72 h-full overflow-hidden" style={{ background: "#5c1a22", color: "#fff", boxShadow: "4px 0 32px rgba(0,0,0,0.35)" }}>
-            {/* Close button */}
             <button onClick={() => setDrawerOpen(false)} className="absolute top-4 right-4 w-9 h-9 rounded-full flex items-center justify-center" style={{ background: "rgba(255,255,255,0.1)", color: "#fff" }}>
               <IconX />
             </button>
@@ -388,16 +379,12 @@ export default function App() {
           </div>
         </div>)}
 
-      {/* ══ Main ══ */}
       <main className="flex-1 flex flex-col overflow-hidden min-w-0">
-
-        {/* Mobile top bar */}
         <div className="lg:hidden flex items-center justify-between px-4 py-3 flex-shrink-0" style={{ background: "#5c1a22" }}>
           <button onClick={() => setDrawerOpen(true)} className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: "rgba(255,255,255,0.1)", color: "#fff" }}>
             <IconMenu />
           </button>
 
-          {/* Logo center */}
           <div className="flex items-center gap-2">
             <svg width="20" height="20" viewBox="0 0 36 36" fill="none">
               <path d="M4 30V8l10 14L24 8v22" stroke="#c9976e" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
@@ -409,12 +396,11 @@ export default function App() {
           <div className="flex items-center gap-2">
             <button style={{ color: "rgba(255,255,255,0.7)" }}><IconBell /></button>
             <div className="w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold" style={{ background: "#c9976e", color: "#fff" }}>
-{iniciais(user?.nome)}
+              {iniciais(user?.nome)}
             </div>
           </div>
         </div>
 
-        {/* Non-painel top bar (desktop only shows date; mobile just shows title) */}
         {activeNav !== "painel" && (<header className="flex items-center justify-between px-4 lg:px-8 pt-4 lg:pt-7 pb-3 lg:pb-5 flex-shrink-0">
             <div>
               <h1 className="text-lg lg:text-2xl font-bold mb-0.5" style={{ color: "#1c0a0d" }}>
@@ -437,7 +423,6 @@ export default function App() {
             </div>
           </header>)}
 
-        {/* Page content */}
         <div className="flex-1 overflow-hidden flex flex-col min-h-0">
           {activeNav === "painel" && <PainelGeral navigate={navigate}/>}
           {activeNav === "pesquisar" && <PesquisarMateriais />}
