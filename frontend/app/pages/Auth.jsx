@@ -56,11 +56,9 @@ export default function Auth({ onAuth }) {
     const [showPw, setShowPw] = useState(false);
     const [showPw2, setShowPw2] = useState(false);
     const [registered, setRegistered] = useState(false);
-    // Login fields
     const [loginEmail, setLoginEmail] = useState("");
     const [loginPw, setLoginPw] = useState("");
     const [loginErrors, setLoginErrors] = useState({});
-    // Register fields
     const [regNome, setRegNome] = useState("");
     const [regEmail, setRegEmail] = useState("");
     const [regTel, setRegTel] = useState("");
@@ -151,18 +149,14 @@ export default function Auth({ onAuth }) {
     };
     const cargos = ["Funcionário", "Gerente de Estoque", "Vendedor", "Administrador", "Outro"];
     return (<div className="flex h-screen overflow-hidden">
-      {/* ── Left: marble panel ── */}
       <div className="hidden lg:flex flex-col justify-between w-[52%] relative overflow-hidden" style={{
             backgroundImage: `url(${MARBLE_BG})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
         }}>
-        {/* Dark overlay */}
         <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, rgba(61,15,22,0.82) 0%, rgba(92,26,34,0.55) 60%, rgba(40,10,14,0.7) 100%)" }}/>
 
-        {/* Content */}
         <div className="relative z-10 p-10">
-          {/* Logo */}
           <div className="flex items-center gap-3">
             <div className="w-11 h-11 rounded-xl flex items-center justify-center" style={{ background: "rgba(255,255,255,0.1)" }}>
               <svg width="26" height="26" viewBox="0 0 36 36" fill="none">
@@ -178,7 +172,6 @@ export default function Auth({ onAuth }) {
         </div>
 
         <div className="relative z-10 px-10 pb-12">
-          {/* Tagline */}
           <div className="mb-10">
             <div className="w-8 h-px mb-6" style={{ background: "#c9976e" }}/>
             <h2 className="text-4xl font-bold leading-tight mb-4" style={{ color: "#f5ede4" }}>
@@ -189,7 +182,6 @@ export default function Auth({ onAuth }) {
             </p>
           </div>
 
-          {/* Feature pills */}
           <div className="flex flex-wrap gap-2">
             {["Gestão de estoque", "Histórico completo", "Alertas de saldo", "Chatbot integrado"].map((f) => (<span key={f} className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full" style={{ background: "rgba(255,255,255,0.09)", color: "rgba(255,255,255,0.7)", border: "1px solid rgba(255,255,255,0.12)" }}>
                 <span className="w-1.5 h-1.5 rounded-full" style={{ background: "#c9976e" }}/>
@@ -203,15 +195,12 @@ export default function Auth({ onAuth }) {
         </div>
       </div>
 
-      {/* ── Right: form panel ── */}
       <div className="flex-1 flex flex-col items-center justify-center px-6 py-10 overflow-y-auto relative" style={{ background: "#3d0f16" }}>
-        {/* Subtle texture */}
         <div className="absolute inset-0 pointer-events-none" style={{
             backgroundImage: "radial-gradient(ellipse 80% 60% at 60% 20%, rgba(201,151,110,0.06) 0%, transparent 70%), radial-gradient(ellipse 60% 80% at 20% 80%, rgba(92,26,34,0.3) 0%, transparent 70%)",
         }}/>
 
         <div className="relative z-10 w-full max-w-[400px]">
-          {/* Mobile logo */}
           <div className="flex lg:hidden items-center gap-3 mb-8 justify-center">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "rgba(255,255,255,0.1)" }}>
               <svg width="22" height="22" viewBox="0 0 36 36" fill="none">
@@ -222,7 +211,6 @@ export default function Auth({ onAuth }) {
             <div className="text-base font-bold" style={{ color: "#f5ede4" }}>Marmopedras</div>
           </div>
 
-          {/* Tab switcher */}
           <div className="flex rounded-xl mb-8 p-1" style={{ background: "rgba(255,255,255,0.06)" }}>
             {["login", "register"].map((m) => (<button key={m} onClick={() => { setMode(m); setLoginErrors({}); setRegErrors({}); setRegistered(false); }} className="flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all" style={mode === m
                 ? { background: "#5c1a22", color: "#f5ede4", boxShadow: "0 2px 8px rgba(0,0,0,0.3)" }
@@ -231,7 +219,6 @@ export default function Auth({ onAuth }) {
               </button>))}
           </div>
 
-          {/* ── LOGIN ── */}
           {mode === "login" && (<form onSubmit={handleLogin} className="flex flex-col gap-4">
               <div>
                 <h1 className="text-2xl font-bold mb-1" style={{ color: "#f5ede4" }}>Bem-vindo de volta</h1>
@@ -264,7 +251,6 @@ export default function Auth({ onAuth }) {
               </button>
             </form>)}
 
-          {/* ── REGISTER ── */}
           {mode === "register" && !registered && (<form onSubmit={handleRegister} className="flex flex-col gap-4">
               <div>
                 <h1 className="text-2xl font-bold mb-1" style={{ color: "#f5ede4" }}>Criar conta</h1>
@@ -276,7 +262,6 @@ export default function Auth({ onAuth }) {
                 <FieldInput icon={<IconMail />} placeholder="E-mail *" type="email" value={regEmail} onChange={(v) => { setRegEmail(v); setRegErrors((e) => ({ ...e, email: "" })); }} error={regErrors.email}/>
                 <FieldInput icon={<IconPhone />} placeholder="Telefone / WhatsApp *" value={regTel} onChange={(v) => { setRegTel(v); setRegErrors((e) => ({ ...e, tel: "" })); }} error={regErrors.tel}/>
 
-                {/* Empresa + Cargo side by side */}
                 <div className="flex gap-3">
                   <div className="flex-1">
                     <div className="relative">
@@ -309,7 +294,6 @@ export default function Auth({ onAuth }) {
               </p>
             </form>)}
 
-          {/* ── SUCCESS ── */}
           {mode === "register" && registered && (<div className="flex flex-col items-center gap-5 text-center py-8">
               <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ background: "rgba(201,151,110,0.15)", border: "2px solid #c9976e" }}>
                 <IconCheck size={28}/>
