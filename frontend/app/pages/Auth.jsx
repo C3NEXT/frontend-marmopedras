@@ -62,7 +62,6 @@ export default function Auth({ onAuth }) {
     const [regNome, setRegNome] = useState("");
     const [regEmail, setRegEmail] = useState("");
     const [regTel, setRegTel] = useState("");
-    const [regEmpresa, setRegEmpresa] = useState("");
     const [regCargo, setRegCargo] = useState("");
     const [regPw, setRegPw] = useState("");
     const [regPw2, setRegPw2] = useState("");
@@ -131,7 +130,7 @@ export default function Auth({ onAuth }) {
         }
         setLoading(true);
         try {
-            await api("register", { nome: regNome, email: regEmail, telefone: regTel, empresa: regEmpresa, cargo: regCargo, senha: regPw });
+            await api("register", { nome: regNome, email: regEmail, telefone: regTel, cargo: regCargo, senha: regPw });
         }
         catch (err) {
             const c = err.campos || {};
@@ -263,14 +262,6 @@ export default function Auth({ onAuth }) {
                 <FieldInput icon={<IconPhone />} placeholder="Telefone / WhatsApp *" value={regTel} onChange={(v) => { setRegTel(v); setRegErrors((e) => ({ ...e, tel: "" })); }} error={regErrors.tel}/>
 
                 <div className="flex gap-3">
-                  <div className="flex-1">
-                    <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: "rgba(255,255,255,0.45)" }}>
-                        <IconBuilding />
-                      </span>
-                      <input type="text" placeholder="Empresa" value={regEmpresa} onChange={(e) => setRegEmpresa(e.target.value)} style={inputBase}/>
-                    </div>
-                  </div>
                   <div className="flex-1">
                     <div className="relative">
                       <select value={regCargo} onChange={(e) => setRegCargo(e.target.value)} className="appearance-none w-full" style={{ ...inputBase, paddingLeft: "14px", color: regCargo ? "#fff" : "rgba(255,255,255,0.4)" }}>
