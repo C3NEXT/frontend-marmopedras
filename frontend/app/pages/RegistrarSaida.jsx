@@ -86,11 +86,9 @@ export default function RegistrarSaida() {
       </div>
 
       <div className="flex gap-6 flex-wrap">
-        {/* Form */}
         <form onSubmit={handleSubmit} className="flex-1 min-w-[320px] rounded-2xl p-7 flex flex-col gap-5" style={{ background: "rgba(255,252,248,0.7)", border: "1px solid rgba(255,250,244,0.9)", boxShadow: "0 2px 20px rgba(92,26,34,0.06)" }}>
           <h2 className="text-base font-semibold mb-1" style={{ color: "#1c0a0d" }}>Dados da Saída</h2>
 
-          {/* Material */}
           <div>
             <label className="block text-xs font-semibold mb-1.5 tracking-wide uppercase" style={{ color: "#7a5c60" }}>
               Material *
@@ -115,14 +113,12 @@ export default function RegistrarSaida() {
 
           {materialSel && <MaterialResumo material={materialSel}/>}
 
-          {/* Estoque atual */}
           {materialSel && (<div className="flex items-center gap-3 px-4 py-3 rounded-xl" style={{ background: "rgba(201,151,110,0.08)", border: "1px solid rgba(201,151,110,0.15)" }}>
               <div className="text-xs" style={{ color: "#7a5c60" }}>
                 Estoque atual: <strong style={{ color: "#5c1a22" }}>{materialSel.estoque} {materialSel.unidade}</strong>
               </div>
             </div>)}
 
-          {/* Quantidade */}
           <div>
             <label className="block text-xs font-semibold mb-1.5 tracking-wide uppercase" style={{ color: "#7a5c60" }}>
               Quantidade *
@@ -140,7 +136,6 @@ export default function RegistrarSaida() {
             {errors.quantidade && <p className="text-xs mt-1" style={{ color: "#b91c1c" }}>{errors.quantidade}</p>}
           </div>
 
-          {/* Obra */}
           <div>
             <label className="block text-xs font-semibold mb-1.5 tracking-wide uppercase" style={{ color: "#7a5c60" }}>
               <span className="flex items-center gap-1.5"><IconMapPin size={12}/> Obra / Destino *</span>
@@ -156,7 +151,6 @@ export default function RegistrarSaida() {
             {errors.obra && <p className="text-xs mt-1" style={{ color: "#b91c1c" }}>{errors.obra}</p>}
           </div>
 
-          {/* Data + Responsável */}
           <div className="flex gap-3">
             <div className="flex-1">
               <label className="block text-xs font-semibold mb-1.5 tracking-wide uppercase" style={{ color: "#7a5c60" }}>
@@ -172,7 +166,6 @@ export default function RegistrarSaida() {
             </div>
           </div>
 
-          {/* Obs */}
           <div>
             <label className="block text-xs font-semibold mb-1.5 tracking-wide uppercase" style={{ color: "#7a5c60" }}>
               Observações
@@ -186,7 +179,6 @@ export default function RegistrarSaida() {
           </button>
         </form>
 
-        {/* Recent exits */}
         <div className="w-72 flex-shrink-0 flex flex-col gap-4">
           <div className="rounded-2xl p-6" style={{ background: "rgba(255,252,248,0.7)", border: "1px solid rgba(255,250,244,0.9)", boxShadow: "0 2px 20px rgba(92,26,34,0.06)" }}>
             <h3 className="text-sm font-semibold mb-4" style={{ color: "#1c0a0d" }}>Últimas Saídas Hoje</h3>
