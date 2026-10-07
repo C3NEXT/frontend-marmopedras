@@ -78,7 +78,6 @@ export default function ChatbotWhatsApp() {
         const nextStep = fluxo.next;
         if (nextStep === "encaminhamento") {
             api("salvarLead", newDados).catch(() => { });
-            // Build summary message
             setTimeout(() => {
                 pushBot(`Perfeito! Aqui está o resumo do seu atendimento:\n\n` +
                     `👤 Nome: ${newDados.nome || "—"}\n` +
@@ -96,7 +95,6 @@ export default function ChatbotWhatsApp() {
         }
         if (nextStep === "fim")
             return;
-        // Build next bot message
         let botMsg = FLUXO[nextStep].bot;
         botMsg = botMsg.replace("{{nome}}", newDados.nome || "");
         if (botMsg) {
@@ -126,7 +124,6 @@ export default function ChatbotWhatsApp() {
     const currentOpcoes = step !== "fim" && step !== "encaminhamento" ? FLUXO[step]?.opcoes : undefined;
     const showInput = !encaminhado && step !== "fim";
     return (<div className="page-scroll flex-1 flex flex-col overflow-hidden px-8 py-7 gap-6">
-      {/* Header */}
       <div className="flex items-center gap-3 flex-shrink-0">
         <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "#25D366", color: "#fff" }}>
           <IconWhatsApp size={20}/>
@@ -138,9 +135,7 @@ export default function ChatbotWhatsApp() {
       </div>
 
       <div className="flex gap-6 flex-1 min-h-0 chat-layout">
-        {/* Chat window */}
         <div className="flex-1 flex flex-col rounded-2xl overflow-hidden min-h-0" style={{ background: "rgba(255,252,248,0.7)", border: "1px solid rgba(255,250,244,0.9)", boxShadow: "0 2px 20px rgba(92,26,34,0.06)" }}>
-          {/* Chat top bar */}
           <div className="flex items-center gap-3 px-5 py-4 flex-shrink-0" style={{ background: "#5c1a22", color: "#fff" }}>
             <div className="w-9 h-9 rounded-full flex items-center justify-center" style={{ background: "#25D366" }}>
               <IconWhatsApp size={18}/>
@@ -154,7 +149,6 @@ export default function ChatbotWhatsApp() {
             </div>
           </div>
 
-          {/* Messages */}
           <div className="flex-1 overflow-y-auto px-5 py-5 flex flex-col gap-3" style={{ background: "rgba(245,240,235,0.4)" }}>
             {msgs.map((msg, i) => (<div key={i} className={`flex ${msg.from === "user" ? "justify-end" : "justify-start"}`}>
                 {msg.from === "bot" && (<div className="w-7 h-7 rounded-full flex items-center justify-center mr-2 flex-shrink-0 mt-auto" style={{ background: "#5c1a22" }}>
@@ -171,14 +165,12 @@ export default function ChatbotWhatsApp() {
                 </div>
               </div>))}
 
-            {/* Options */}
             {showInput && currentOpcoes && (<div className="flex flex-wrap gap-2 mt-1 justify-start pl-9">
                 {currentOpcoes.map((op) => (<button key={op} onClick={() => handleSend(op)} className="px-3 py-2 rounded-xl text-xs font-medium transition-all hover:opacity-80" style={{ background: "rgba(92,26,34,0.07)", color: "#5c1a22", border: "1px solid rgba(92,26,34,0.15)" }}>
                     {op}
                   </button>))}
               </div>)}
 
-            {/* Encaminhado */}
             {encaminhado && (<div className="flex justify-center mt-2">
                 <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold" style={{ background: "#d1fae5", color: "#065f46" }}>
                   <IconCheck size={13}/>
@@ -189,7 +181,6 @@ export default function ChatbotWhatsApp() {
             <div ref={bottomRef}/>
           </div>
 
-          {/* Input */}
           {showInput && (<div className="flex items-end gap-3 px-4 py-3 flex-shrink-0" style={{ borderTop: "1px solid rgba(201,151,110,0.12)", background: "rgba(255,252,248,0.9)" }}>
               <textarea rows={1} placeholder="Digite sua mensagem…" value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={handleKey} className="flex-1 px-4 py-2.5 rounded-xl text-sm outline-none resize-none" style={{ background: "rgba(255,252,248,0.8)", border: "1px solid rgba(92,26,34,0.12)", color: "#1c0a0d", maxHeight: "96px" }}/>
               <button onClick={() => handleSend()} className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 hover:opacity-90 transition-opacity" style={{ background: "#5c1a22", color: "#fff" }}>
@@ -198,9 +189,7 @@ export default function ChatbotWhatsApp() {
             </div>)}
         </div>
 
-        {/* Side info */}
         <div className="chat-side w-64 flex-shrink-0 flex flex-col gap-4">
-          {/* Fluxo */}
           <div className="rounded-2xl p-5" style={{ background: "rgba(255,252,248,0.7)", border: "1px solid rgba(255,250,244,0.9)", boxShadow: "0 2px 20px rgba(92,26,34,0.06)" }}>
             <div className="text-xs font-bold uppercase tracking-widest mb-4" style={{ color: "#5c1a22" }}>
               Etapas do Fluxo
@@ -231,7 +220,6 @@ export default function ChatbotWhatsApp() {
             </ol>
           </div>
 
-          {/* Dados coletados */}
           {Object.keys(dados).length > 0 && (<div className="rounded-2xl p-5" style={{ background: "rgba(255,252,248,0.7)", border: "1px solid rgba(255,250,244,0.9)", boxShadow: "0 2px 20px rgba(92,26,34,0.06)" }}>
               <div className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "#5c1a22" }}>
                 Dados Coletados
@@ -246,7 +234,6 @@ export default function ChatbotWhatsApp() {
               </div>
             </div>)}
 
-          {/* Restart */}
           <button onClick={() => {
             setMsgs([{ from: "bot", text: FLUXO.inicio.bot, time: now() }]);
             setStep("nome");
