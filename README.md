@@ -39,7 +39,7 @@
 
 <p align="center">
   <img
-    src="assets/logo-next.jpg"
+    src="frontend/assets/logo-next.jpg"
     alt="Marmopedras"
     width="90%"
   >
@@ -176,31 +176,31 @@ Entre eles:
 <table>
   <tr>
     <td align="center">
-      <img src="assets/Emerson.png" width="120px;" alt="Foto do Emerson"/><br>
+      <img src="frontend/assets/Emerson.png" width="120px;" alt="Foto do Emerson"/><br>
       <a href="https://www.linkedin.com/in/emerson-willian-19984630b/" target="_blank">
         <sub><b>Emerson Dias</b></sub> 
       </a>
     </td>
     <td align="center">
-      <img src="assets/Joao.png" width="95px;" alt="Foto de João"/><br>
+      <img src="frontend/assets/Joao.png" width="95px;" alt="Foto de João"/><br>
       <a href="https://www.linkedin.com/in/joão-lucas-silva-paz-141912441?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank">
         <sub><b>João Lucas</b></sub> 
       </a>
     </td>
     <td align="center">
-      <img src="assets/Marcela.png" width="120px;" alt="Foto da Marcela"/><br>
+      <img src="frontend/assets/Marcela.png" width="120px;" alt="Foto da Marcela"/><br>
       <a href= "https://www.linkedin.com/in/marcela-cristine-cantalice-santos-994309410/" target="_blank">
         <sub><b>Marcela Cantalice</b></sub> 
       </a>
     </td>
     <td align="center">
-      <img src="assets/Marcos.png" width="120px;" alt="Foto do Marcos"/><br>
+      <img src="frontend/assets/Marcos.png" width="120px;" alt="Foto do Marcos"/><br>
       <a href="https://www.linkedin.com/in/marcos-dalyson-9457373b3?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank">
         <sub><b>Marcos Dalyson</b></sub> 
       </a>
     </td>
     <td align="center">
-      <img src="assets/Mateus.png" width="120px;" alt="Foto do Mateus"/><br>
+      <img src="frontend/assets/Mateus.png" width="120px;" alt="Foto do Mateus"/><br>
       <a href="https://www.linkedin.com/in/mateus-oliveira-172492213" target="_blank">
         <sub><b>Mateus Oliveira</b></sub>
       </a>
