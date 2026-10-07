@@ -46,7 +46,6 @@ export default function RegistrarEntrada() {
     const [errors, setErrors] = useState({});
     const novo = form.modo === "novo";
     const materialSel = !novo ? materiais.find((m) => matKey(m) === form.material) : null;
-    // Prévia do próximo código (o valor definitivo é gerado pelo servidor ao salvar)
     const proximoPrevisto = (() => {
         const nums = materiais.map((m) => Number(matCod(m))).filter((n) => Number.isFinite(n));
         return fmtCodigo((nums.length ? Math.max(...nums) : 0) + 1);
@@ -120,7 +119,6 @@ export default function RegistrarEntrada() {
     return (<div className="page-scroll flex-1 overflow-y-auto px-8 py-7 flex flex-col gap-6">
       {success && <SuccessToast onClose={() => setSuccess(false)} detalhe={detalheToast}/>}
 
-      {/* Header */}
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "rgba(92,26,34,0.08)", color: "#5c1a22" }}>
           <IconDown size={18}/>
@@ -132,13 +130,11 @@ export default function RegistrarEntrada() {
       </div>
 
       <div className="flex gap-6 flex-wrap">
-        {/* Form */}
         <form onSubmit={handleSubmit} className="flex-1 min-w-[320px] rounded-2xl p-7 flex flex-col gap-5" style={{ background: "rgba(255,252,248,0.7)", border: "1px solid rgba(255,250,244,0.9)", boxShadow: "0 2px 20px rgba(92,26,34,0.06)" }}>
           <h2 className="text-base font-semibold mb-1" style={{ color: "#1c0a0d" }}>
             Dados da Entrada
           </h2>
 
-          {/* Material: existente ou novo */}
           <div>
             <div className="flex gap-1 mb-3">
               {[["existente", "Material existente"], ["novo", "+ Novo material"]].map(([id, label]) => (<button type="button" key={id} onClick={() => trocarModo(id)} className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all" style={form.modo === id
@@ -184,7 +180,6 @@ export default function RegistrarEntrada() {
               </>)}
           </div>
 
-          {/* Categoria + Tipo */}
           <div className="flex gap-3">
             <div className="flex-1">
               <label className="block text-xs font-semibold mb-1.5 tracking-wide uppercase" style={{ color: "#7a5c60" }}>
@@ -196,7 +191,6 @@ export default function RegistrarEntrada() {
                 color: form.categoria ? "#1c0a0d" : "#9b7e82",
             }}>
                 <option value="">{novo ? "Selecione…" : "—"}</option>
-                {/* mantém exibida uma categoria antiga de material já cadastrado */}
                 {form.categoria && !CATEGORIAS.includes(form.categoria) && <option value={form.categoria}>{form.categoria}</option>}
                 {CATEGORIAS.map((c) => <option key={c} value={c}>{c}</option>)}
               </select>
@@ -213,7 +207,6 @@ export default function RegistrarEntrada() {
             </div>
           </div>
 
-          {/* Quantidade + unidade */}
           <div className="flex gap-3">
             <div className="flex-1">
               <label className="block text-xs font-semibold mb-1.5 tracking-wide uppercase" style={{ color: "#7a5c60" }}>
@@ -224,7 +217,7 @@ export default function RegistrarEntrada() {
             border: errors.quantidade ? "1px solid #f87171" : "1px solid rgba(92,26,34,0.12)",
             color: "#1c0a0d",
         }}/>
-              {errors.quantidade && <p className="text-xs mt-1" style={{ color: "#b91c1c" }}>{errors.quantidade}</p>}
+              {errors.quantidade && <p className="text-xs mt-1" style={{ color: "#b91c1b" }}>{errors.quantidade}</p>}
             </div>
             <div className="w-24">
               <label className="block text-xs font-semibold mb-1.5 tracking-wide uppercase" style={{ color: "#7a5c60" }}>
@@ -236,7 +229,6 @@ export default function RegistrarEntrada() {
             </div>
           </div>
 
-          {/* Local */}
           <div>
             <label className="block text-xs font-semibold mb-1.5 tracking-wide uppercase" style={{ color: "#7a5c60" }}>
               <span className="flex items-center gap-1.5"><IconMapPin size={12}/> Destino</span>
@@ -246,7 +238,6 @@ export default function RegistrarEntrada() {
             </select>
           </div>
 
-          {/* Data + NF */}
           <div className="flex gap-3">
             <div className="flex-1">
               <label className="block text-xs font-semibold mb-1.5 tracking-wide uppercase" style={{ color: "#7a5c60" }}>
@@ -259,7 +250,6 @@ export default function RegistrarEntrada() {
             </div>
           </div>
 
-          {/* Obs */}
           <div>
             <label className="block text-xs font-semibold mb-1.5 tracking-wide uppercase" style={{ color: "#7a5c60" }}>
               Observações
@@ -273,7 +263,6 @@ export default function RegistrarEntrada() {
           </button>
         </form>
 
-        {/* Recent entries */}
         <div className="w-72 flex-shrink-0 flex flex-col gap-4">
           <div className="rounded-2xl p-6" style={{ background: "rgba(255,252,248,0.7)", border: "1px solid rgba(255,250,244,0.9)", boxShadow: "0 2px 20px rgba(92,26,34,0.06)" }}>
             <h3 className="text-sm font-semibold mb-4" style={{ color: "#1c0a0d" }}>
