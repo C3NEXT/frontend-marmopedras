@@ -80,7 +80,6 @@ export default function Transferencia() {
     return (<div className="page-scroll flex-1 overflow-y-auto px-8 py-7 flex flex-col gap-6">
       {success && <SuccessToast onClose={() => setSuccess(false)}/>}
 
-      {/* Header */}
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "rgba(92,26,34,0.08)", color: "#5c1a22" }}>
           <IconTransfer size={18}/>
@@ -92,11 +91,9 @@ export default function Transferencia() {
       </div>
 
       <div className="flex gap-6 flex-wrap">
-        {/* Form */}
         <form onSubmit={handleSubmit} className="flex-1 min-w-[320px] rounded-2xl p-7 flex flex-col gap-5" style={cardStyle}>
           <h2 className="text-base font-semibold" style={{ color: "#1c0a0d" }}>Dados da Transferência</h2>
 
-          {/* Material */}
           <div>
             <Label>Material *</Label>
             <div className="relative">
@@ -111,7 +108,6 @@ export default function Transferencia() {
 
           {materialSel && <MaterialResumo material={materialSel}/>}
 
-          {/* Estoque por local */}
           {materialSel && (<div className="rounded-xl overflow-hidden" style={{ border: "1px solid rgba(201,151,110,0.15)" }}>
               <div className="px-4 py-2.5 text-xs font-semibold uppercase tracking-widest" style={{ background: "rgba(201,151,110,0.08)", color: "#7a5c60" }}>
                 Estoque por localização
@@ -129,7 +125,6 @@ export default function Transferencia() {
               </div>
             </div>)}
 
-          {/* Origem → Destino */}
           <div className="flex gap-3 items-end">
             <div className="flex-1">
               <Label><span className="flex items-center gap-1"><IconMapPin size={11}/> Origem *</span></Label>
@@ -154,7 +149,6 @@ export default function Transferencia() {
             </div>
           </div>
 
-          {/* Quantidade */}
           <div>
             <Label>Quantidade *</Label>
             <div className="flex gap-2 items-center">
@@ -167,7 +161,6 @@ export default function Transferencia() {
             {errors.quantidade && <p className="text-xs mt-1" style={{ color: "#b91c1c" }}>{errors.quantidade}</p>}
           </div>
 
-          {/* Obs */}
           <div>
             <Label>Observações</Label>
             <textarea rows={2} placeholder="Motivo da transferência…" value={form.obs} onChange={(e) => setForm((f) => ({ ...f, obs: e.target.value }))} className="w-full px-4 py-2.5 rounded-xl text-sm outline-none resize-none" style={inputStyle()}/>
@@ -179,7 +172,6 @@ export default function Transferencia() {
           </button>
         </form>
 
-        {/* Recent transfers */}
         <div className="w-72 flex-shrink-0">
           <div className="rounded-2xl p-6" style={cardStyle}>
             <h3 className="text-sm font-semibold mb-4" style={{ color: "#1c0a0d" }}>Transferências de Hoje</h3>
