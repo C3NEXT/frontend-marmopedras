@@ -1,29 +1,62 @@
+
 import { useState, useEffect } from "react";
 import { api } from "../api";
-import { IconSearch, IconFilter, IconTag, IconAlert, IconBox } from "../components/Icons";
-import { TIPOS, fmtCodigo, matKey, categoriasComLegado } from "../constants";
+import {
+    IconSearch,
+    IconFilter,
+    IconTag,
+    IconAlert,
+    IconBox,
+} from "../components/Icons";
+import {
+    TIPOS,
+    fmtCodigo,
+    matKey,
+    categoriasComLegado,
+} from "../constants";
 
 const statusConfig = {
-    ok: { label: "Normal", bg: "#d1fae5", color: "#065f46" },
-    baixo: { label: "Baixo", bg: "#fef3c7", color: "#92400e" },
-    crítico: { label: "Crítico", bg: "#fee2e2", color: "#991b1b" },
+    ok: {
+        label: "Normal",
+        bg: "#d1fae5",
+        color: "#065f46",
+    },
+    baixo: {
+        label: "Baixo",
+        bg: "#fef3c7",
+        color: "#92400e",
+    },
+    crítico: {
+        label: "Crítico",
+        bg: "#fee2e2",
+        color: "#991b1b",
+    },
 };
+
+const unidadeChapas = (quantidade) =>
+    Number(quantidade) === 1 ? "chapa" : "chapas";
 
 export default function PesquisarMateriais() {
     const [materiais, setMateriais] = useState([]);
-
-    useEffect(() => {
-        api("listarMateriais").then(setMateriais).catch(() => {});
-    }, []);
-
-    const categorias = ["Todos", ...categoriasComLegado(materiais)];
     const [query, setQuery] = useState("");
     const [categoria, setCategoria] = useState("Todos");
     const [tipoFiltro, setTipoFiltro] = useState("Todos");
     const [statusFiltro, setStatusFiltro] = useState("Todos");
 
+    useEffect(() => {
+        api("listarMateriais")
+            .then(setMateriais)
+            .catch(() => {});
+    }, []);
+
+    const categorias = [
+        "Todos",
+        ...categoriasComLegado(materiais),
+    ];
+
     const filtered = materiais.filter((m) => {
         const q = query.toLowerCase().trim();
+
         const matchQ =
             m.nome.toLowerCase().includes(q) ||
             String(m.cod ?? "").toLowerCase().includes(q) ||
@@ -31,9 +64,14 @@ export default function PesquisarMateriais() {
 
         const matchTipo =
             tipoFiltro === "Todos" ||
-            (tipoFiltro === "Em branco" ? !m.tipo : m.tipo === tipoFiltro);
+            (tipoFiltro === "Em branco"
+                ? !m.tipo
+                : m.tipo === tipoFiltro);
 
-        const matchCat = categoria === "Todos" || m.categoria === categoria;
+        const matchCat =
+            categoria === "Todos" ||
+            m.categoria === categoria;
+
         const matchSt =
             statusFiltro === "Todos" ||
             m.status === statusFiltro.toLowerCase();
@@ -45,12 +83,24 @@ export default function PesquisarMateriais() {
         <div className="page-scroll flex-1 overflow-y-auto px-8 py-7 flex flex-col gap-6">
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-2xl font-bold mb-1" style={{ color: "#1c0a0d" }}>
+                    <h1
+                        className="text-2xl font-bold mb-1"
+                        style={{ color: "#1c0a0d" }}
+                    >
                         Pesquisar Materiais
                     </h1>
-                    <p className="text-sm" style={{ color: "#7a5c60" }}>
+
+                    <p
+                        className="text-sm"
+                        style={{ color: "#7a5c60" }}
+                    >
                         {materiais.length} materiais cadastrados ·{" "}
-                        {materiais.filter((m) => m.status !== "ok").length} com atenção
+                        {
+                            materiais.filter(
+                                (m) => m.status !== "ok"
+                            ).length
+                        }{" "}
+                        com atenção
                     </p>
                 </div>
 
@@ -59,6 +109,7 @@ export default function PesquisarMateriais() {
                     style={{ color: "#9b7e82" }}
                 >
                     <IconBox size={14} />
+
                     <span>
                         {filtered.length} resultado
                         {filtered.length !== 1 ? "s" : ""}
@@ -94,7 +145,8 @@ export default function PesquisarMateriais() {
                         className="text-xs mr-1 flex items-center gap-1"
                         style={{ color: "#9b7e82" }}
                     >
-                        <IconFilter size={13} /> Categoria:
+                        <IconFilter size={13} />
+                        Categoria:
                     </span>
 
                     {categorias.map((c) => (
@@ -104,7 +156,10 @@ export default function PesquisarMateriais() {
                             className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
                             style={
                                 categoria === c
-                                    ? { background: "#5c1a22", color: "#fff" }
+                                    ? {
+                                          background: "#5c1a22",
+                                          color: "#fff",
+                                      }
                                     : {
                                           background: "rgba(255,252,248,0.7)",
                                           color: "#7a5c60",
@@ -118,7 +173,10 @@ export default function PesquisarMateriais() {
                 </div>
 
                 <div className="flex items-center gap-1 flex-wrap">
-                    <span className="text-xs mr-1" style={{ color: "#9b7e82" }}>
+                    <span
+                        className="text-xs mr-1"
+                        style={{ color: "#9b7e82" }}
+                    >
                         Tipo:
                     </span>
 
@@ -129,7 +187,10 @@ export default function PesquisarMateriais() {
                             className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
                             style={
                                 tipoFiltro === t
-                                    ? { background: "#5c1a22", color: "#fff" }
+                                    ? {
+                                          background: "#5c1a22",
+                                          color: "#fff",
+                                      }
                                     : {
                                           background: "rgba(255,252,248,0.7)",
                                           color: "#7a5c60",
@@ -143,7 +204,10 @@ export default function PesquisarMateriais() {
                 </div>
 
                 <div className="flex items-center gap-1">
-                    <span className="text-xs mr-1" style={{ color: "#9b7e82" }}>
+                    <span
+                        className="text-xs mr-1"
+                        style={{ color: "#9b7e82" }}
+                    >
                         Status:
                     </span>
 
@@ -154,7 +218,10 @@ export default function PesquisarMateriais() {
                             className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
                             style={
                                 statusFiltro === s
-                                    ? { background: "#5c1a22", color: "#fff" }
+                                    ? {
+                                          background: "#5c1a22",
+                                          color: "#fff",
+                                      }
                                     : {
                                           background: "rgba(255,252,248,0.7)",
                                           color: "#7a5c60",
@@ -177,20 +244,35 @@ export default function PesquisarMateriais() {
                 }}
             >
                 <div className="table-scroll-wrap">
-                    <table className="w-full" style={{ minWidth: "700px" }}>
+                    <table
+                        className="w-full"
+                        style={{ minWidth: "700px" }}
+                    >
                         <thead>
-                            <tr style={{ borderBottom: "1px solid rgba(201,151,110,0.12)" }}>
-                                {["Código", "Material", "Categoria", "Tipo", "Estoque", "Mínimo", "Localização", "Status"].map(
-                                    (h) => (
-                                        <th
-                                            key={h}
-                                            className="text-left px-5 py-3.5 text-[10.5px] font-semibold tracking-widest uppercase"
-                                            style={{ color: "#9b7e82" }}
-                                        >
-                                            {h}
-                                        </th>
-                                    )
-                                )}
+                            <tr
+                                style={{
+                                    borderBottom:
+                                        "1px solid rgba(201,151,110,0.12)",
+                                }}
+                            >
+                                {[
+                                    "Código",
+                                    "Material",
+                                    "Categoria",
+                                    "Tipo",
+                                    "Estoque",
+                                    "Mínimo",
+                                    "Localização",
+                                    "Status",
+                                ].map((h) => (
+                                    <th
+                                        key={h}
+                                        className="text-left px-5 py-3.5 text-[10.5px] font-semibold tracking-widest uppercase"
+                                        style={{ color: "#9b7e82" }}
+                                    >
+                                        {h}
+                                    </th>
+                                ))}
                             </tr>
                         </thead>
 
@@ -207,7 +289,9 @@ export default function PesquisarMateriais() {
                                 </tr>
                             ) : (
                                 filtered.map((m, i) => {
-                                    const st = statusConfig[m.status];
+                                    const st =
+                                        statusConfig[m.status] ||
+                                        statusConfig.ok;
 
                                     return (
                                         <tr
@@ -222,14 +306,18 @@ export default function PesquisarMateriais() {
                                         >
                                             <td
                                                 className="px-5 py-3.5 text-xs font-mono font-semibold"
-                                                style={{ color: "#5c1a22" }}
+                                                style={{
+                                                    color: "#5c1a22",
+                                                }}
                                             >
                                                 {fmtCodigo(m.cod)}
                                             </td>
 
                                             <td
                                                 className="px-5 py-3.5 text-sm font-medium"
-                                                style={{ color: "#1c0a0d" }}
+                                                style={{
+                                                    color: "#1c0a0d",
+                                                }}
                                             >
                                                 {m.nome}
                                             </td>
@@ -237,7 +325,9 @@ export default function PesquisarMateriais() {
                                             <td className="px-5 py-3.5">
                                                 <span
                                                     className="flex items-center gap-1.5 text-xs"
-                                                    style={{ color: "#7a5c60" }}
+                                                    style={{
+                                                        color: "#7a5c60",
+                                                    }}
                                                 >
                                                     <IconTag size={12} />
                                                     {m.categoria}
@@ -246,34 +336,45 @@ export default function PesquisarMateriais() {
 
                                             <td
                                                 className="px-5 py-3.5 text-xs"
-                                                style={{ color: "#7a5c60" }}
+                                                style={{
+                                                    color: "#7a5c60",
+                                                }}
                                             >
                                                 {m.tipo || "—"}
                                             </td>
 
                                             <td
                                                 className="px-5 py-3.5 text-sm tabular-nums font-semibold"
-                                                style={{ color: "#1c0a0d" }}
+                                                style={{
+                                                    color: "#1c0a0d",
+                                                }}
                                             >
                                                 {m.estoque}{" "}
                                                 <span
                                                     className="font-normal text-xs"
-                                                    style={{ color: "#9b7e82" }}
+                                                    style={{
+                                                        color: "#9b7e82",
+                                                    }}
                                                 >
-                                                    {m.unidade}
+                                                    {unidadeChapas(m.estoque)}
                                                 </span>
                                             </td>
 
                                             <td
                                                 className="px-5 py-3.5 text-sm tabular-nums"
-                                                style={{ color: "#9b7e82" }}
+                                                style={{
+                                                    color: "#9b7e82",
+                                                }}
                                             >
-                                                {m.minimo} {m.unidade}
+                                                {m.minimo}{" "}
+                                                {unidadeChapas(m.minimo)}
                                             </td>
 
                                             <td
                                                 className="px-5 py-3.5 text-xs"
-                                                style={{ color: "#7a5c60" }}
+                                                style={{
+                                                    color: "#7a5c60",
+                                                }}
                                             >
                                                 {m.local}
                                             </td>
@@ -308,13 +409,17 @@ export default function PesquisarMateriais() {
                     },
                     {
                         label: "Saldo Baixo",
-                        value: materiais.filter((m) => m.status === "baixo").length,
+                        value: materiais.filter(
+                            (m) => m.status === "baixo"
+                        ).length,
                         icon: <IconAlert size={16} />,
                         color: "#92400e",
                     },
                     {
                         label: "Estoque Crítico",
-                        value: materiais.filter((m) => m.status === "crítico").length,
+                        value: materiais.filter(
+                            (m) => m.status === "crítico"
+                        ).length,
                         icon: <IconAlert size={16} />,
                         color: "#991b1b",
                     },
@@ -345,7 +450,11 @@ export default function PesquisarMateriais() {
                             >
                                 {card.value}
                             </div>
-                            <div className="text-xs" style={{ color: "#9b7e82" }}>
+
+                            <div
+                                className="text-xs"
+                                style={{ color: "#9b7e82" }}
+                            >
                                 {card.label}
                             </div>
                         </div>
