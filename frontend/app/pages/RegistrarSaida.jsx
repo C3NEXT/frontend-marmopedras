@@ -20,14 +20,6 @@ import {
   MaterialResumo
 } from "../components/MaterialInfo";
 
-const obras = [
-  "Obra Residencial — Av. das Américas, 4500",
-  "Condomínio Bela Vista — Bloco C",
-  "Reforma Comercial — R. do Comércio, 120",
-  "Hotel Panorama — Suítes 301-320",
-  "Escritório Corporativo — Torre Sul"
-];
-
 const unidadeChapas = (quantidade) =>
   Number(quantidade) === 1 ? "chapa" : "chapas";
 
@@ -60,6 +52,7 @@ const SuccessToast = ({ onClose }) => (
       <div className="text-sm font-semibold">
         Saída registrada com sucesso!
       </div>
+
       <div
         className="text-xs mt-0.5"
         style={{ color: "rgba(255,255,255,0.55)" }}
@@ -83,6 +76,7 @@ export default function RegistrarSaida() {
   const [form, setForm] = useState(formInicial);
   const [success, setSuccess] = useState(false);
   const [errors, setErrors] = useState({});
+  const [enviando, setEnviando] = useState(false);
 
   const carregar = () => {
     api("listarMateriais")
@@ -130,8 +124,8 @@ export default function RegistrarSaida() {
         `Estoque insuficiente (disponível: ${quantidadeDisponivel} ${unidadeChapas(quantidadeDisponivel)})`;
     }
 
-    if (!form.obra) {
-      e.obra = "Informe a obra de destino";
+    if (!form.obra.trim()) {
+      e.obra = "Informe a obra ou destino das chapas";
     }
 
     return e;
@@ -140,6 +134,8 @@ export default function RegistrarSaida() {
   const handleSubmit = async (ev) => {
     ev.preventDefault();
 
+    if (enviando) return;
+
     const e = validate();
 
     if (Object.keys(e).length > 0) {
@@ -147,18 +143,26 @@ export default function RegistrarSaida() {
       return;
     }
 
+    setEnviando(true);
+
     try {
       await api("registrarSaida", {
         material: materialSel?.nome ?? form.material,
         codigo: matCod(materialSel || {}),
         quantidade: Number(form.quantidade),
-        obra: form.obra,
+        obra: form.obra.trim(),
         data: form.data,
-        responsavel: form.responsavel,
+        responsavel: form.responsavel.trim(),
         obs: form.obs
       });
 
       carregar();
+
+      setSuccess(true);
+      setForm(formInicial());
+      setErrors({});
+
+      setTimeout(() => setSuccess(false), 4000);
     } catch (err) {
       setErrors(
         err.campos || {
@@ -166,18 +170,13 @@ export default function RegistrarSaida() {
             err.message || "Erro ao registrar saída"
         }
       );
-      return;
+    } finally {
+      setEnviando(false);
     }
-
-    setSuccess(true);
-    setForm(formInicial());
-    setErrors({});
-
-    setTimeout(() => setSuccess(false), 4000);
   };
 
   return (
-    <div className="page-scroll flex-1 overflow-y-auto px-8 py-7 flex flex-col gap-6">
+    <div className="page-scroll flex-1 overflow-y-auto px-4 sm:px-8 py-5 sm:py-7 flex flex-col gap-6">
       {success && (
         <SuccessToast
           onClose={() => setSuccess(false)}
@@ -202,11 +201,12 @@ export default function RegistrarSaida() {
           >
             Registrar Saída
           </h1>
+
           <p
             className="text-sm"
             style={{ color: "#7a5c60" }}
           >
-            Retire chapas do estoque para obras e projetos
+            Registre a saída de chapas do estoque
           </p>
         </div>
       </div>
@@ -252,6 +252,7 @@ export default function RegistrarSaida() {
                     material: e.target.value,
                     quantidade: ""
                   }));
+
                   setErrors((prev) => ({
                     ...prev,
                     material: "",
@@ -300,10 +301,12 @@ export default function RegistrarSaida() {
           </div>
 
           {materialSel && (
-            <MaterialResumo material={{
-              ...materialSel,
-              unidade: "chapas"
-            }} />
+            <MaterialResumo
+              material={{
+                ...materialSel,
+                unidade: "chapas"
+              }}
+            />
           )}
 
           {materialSel && (
@@ -398,35 +401,30 @@ export default function RegistrarSaida() {
               </span>
             </label>
 
-            <select
+            <input
+              type="text"
+              placeholder="Ex.: Obra do cliente João Silva"
               value={form.obra}
-              onChange={(e) =>
+              onChange={(e) => {
                 setForm((f) => ({
                   ...f,
                   obra: e.target.value
-                }))
-              }
-              className="w-full px-4 py-2.5 rounded-xl text-sm outline-none appearance-none"
+                }));
+
+                setErrors((prev) => ({
+                  ...prev,
+                  obra: ""
+                }));
+              }}
+              className="w-full px-4 py-2.5 rounded-xl text-sm outline-none"
               style={{
                 background: "rgba(255,252,248,0.8)",
                 border: errors.obra
                   ? "1px solid #f87171"
                   : "1px solid rgba(92,26,34,0.12)",
-                color: form.obra
-                  ? "#1c0a0d"
-                  : "#9b7e82"
+                color: "#1c0a0d"
               }}
-            >
-              <option value="">
-                Selecione a obra…
-              </option>
-
-              {obras.map((o) => (
-                <option key={o} value={o}>
-                  {o}
-                </option>
-              ))}
-            </select>
+            />
 
             {errors.obra && (
               <p
@@ -525,14 +523,15 @@ export default function RegistrarSaida() {
 
           <button
             type="submit"
-            className="w-full py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-opacity hover:opacity-90"
+            disabled={enviando}
+            className="w-full py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-opacity hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
             style={{
               background: "#5c1a22",
               color: "#fff"
             }}
           >
             <IconUp size={15} />
-            Confirmar Saída
+            {enviando ? "Registrando..." : "Confirmar Saída"}
           </button>
         </form>
 
@@ -592,6 +591,7 @@ export default function RegistrarSaida() {
                     <CodigoBadge
                       codigo={s.codigo ?? s.cod}
                     />
+
                     <span
                       className="text-xs font-medium"
                       style={{ color: "#1c0a0d" }}
@@ -633,13 +633,15 @@ export default function RegistrarSaida() {
             >
               Atenção
             </h3>
+
             <p
               className="text-xs leading-relaxed"
               style={{ color: "#7a5c60" }}
             >
               Verifique sempre se a quantidade de chapas
-              disponível é suficiente para a obra. Materiais
-              com estoque crítico serão sinalizados automaticamente.
+              disponível é suficiente para a saída.
+              Materiais com estoque crítico serão
+              sinalizados automaticamente.
             </p>
           </div>
         </div>
