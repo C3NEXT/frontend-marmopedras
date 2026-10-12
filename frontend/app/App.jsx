@@ -10,7 +10,6 @@ import RegistrarSaida from "./pages/RegistrarSaida";
 import Transferencia from "./pages/Transferencia";
 import DistribuicaoEstoque from "./pages/DistribuicaoEstoque";
 import HistoricoMovimentacoes from "./pages/HistoricoMovimentacoes";
-import ChatbotWhatsApp from "./pages/ChatbotWhatsApp";
 import { fmtCodigo, descMov } from "./constants";
 
 const IconBox = () => (<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
@@ -36,9 +35,6 @@ const IconHistory = () => (<svg width="18" height="18" viewBox="0 0 24 24" fill=
     <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/>
     <line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/>
     <line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
-  </svg>);
-const IconWhatsApp = () => (<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
   </svg>);
 const IconLogout = () => (<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
@@ -81,7 +77,6 @@ const navItems = [
     { id: "transferencia", label: "Transferência / Local.", icon: <IconTransfer /> },
     { id: "distribuicao", label: "Distribuição no Estoque", icon: <IconDistrib /> },
     { id: "historico", label: "Histórico de Movimentações", icon: <IconHistory /> },
-    { id: "chatbot", label: "Chatbot WhatsApp", icon: <IconWhatsApp />, section: "ATENDIMENTO" },
 ];
 
 const MARBLE_HERO = "https://images.unsplash.com/photo-1770065805058-3bfed55e23ee?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=1080";
@@ -338,7 +333,6 @@ const pageTitles = {
     transferencia: { title: "Transferência / Local.", sub: "Mova materiais entre depósitos" },
     distribuicao: { title: "Distribuição no Estoque", sub: "Visão geral dos depósitos" },
     historico: { title: "Histórico de Movimentações", sub: "Registro completo de movimentações" },
-    chatbot: { title: "Chatbot WhatsApp", sub: "Simulação do fluxo de pré-atendimento" },
 };
 
 export default function App() {
@@ -431,7 +425,6 @@ export default function App() {
           {activeNav === "transferencia" && <Transferencia />}
           {activeNav === "distribuicao" && <DistribuicaoEstoque />}
           {activeNav === "historico" && <HistoricoMovimentacoes />}
-          {activeNav === "chatbot" && <ChatbotWhatsApp />}
         </div>
       </main>
     </div>);
