@@ -104,8 +104,8 @@ export default function RegistrarSaida() {
     const e = {};
     const quantidade = Number(form.quantidade);
 
-    if (!form.material) {
-      e.material = "Selecione um material";
+    if (!form.material || !materialSel) {
+      e.material = "Selecione um material válido";
     }
 
     if (
@@ -583,7 +583,7 @@ export default function RegistrarSaida() {
                         borderRadius: "99px"
                       }}
                     >
-                      {s.qtd} {unidadeChapas(s.qtd)}
+                      {s.qtd}
                     </span>
                   </div>
 
