@@ -3,22 +3,17 @@ import { useState } from "react";
 import { api } from "../api";
 import { IconCheck } from "../components/Icons";
 
-const MARBLE_BG =
-  "https://images.unsplash.com/photo-1770065805058-3bfed55e23ee?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=1400";
+const MARBLE =
+  "https://images.unsplash.com/photo-1770065805058-3bfed55e23ee?auto=format&fit=crop&w=1800&q=90";
 
-const COLORS = {
-  wine: "#581e2b",
-  wineDark: "#38111b",
-  wineLight: "#783747",
-  gold: "#b99067",
-  cream: "#faf7f2",
-  background: "#f6f1eb",
-  text: "#35272a",
-  muted: "#867d7a",
-  border: "#e9dfd6",
+const colors = {
+  wine: "#591c29",
+  wineDark: "#350c18",
+  wineSoft: "#782f3c",
+  gold: "#b68a68",
 };
 
-function LogoM({ size = 54 }) {
+function LogoM({ size = 58 }) {
   return (
     <svg
       width={size}
@@ -28,30 +23,24 @@ function LogoM({ size = 54 }) {
       aria-hidden="true"
     >
       <path
-        d="M6 52V10L21 31L32 13L43 31L58 10V52"
-        stroke={COLORS.wine}
+        d="M8 53V10L23 31L32 16L41 31L56 10V53"
+        stroke="#753543"
         strokeWidth="5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
-        d="M15 52V34L21 42L32 25L43 42L49 34V52"
-        stroke={COLORS.gold}
+        d="M17 53V36L23 43L32 29L41 43L47 36V53"
+        stroke="#b78d69"
         strokeWidth="3"
         strokeLinecap="round"
         strokeLinejoin="round"
-      />
-      <path
-        d="M6 10L15 15M58 10L49 15"
-        stroke={COLORS.gold}
-        strokeWidth="3"
-        strokeLinecap="round"
       />
     </svg>
   );
 }
 
-function Icon({ name, size = 19 }) {
+function Icon({ name, size = 20 }) {
   const paths = {
     mail: (
       <>
@@ -92,10 +81,12 @@ function Icon({ name, size = 19 }) {
         <path d="M3 7v10l9 5 9-5V7M12 12v10" />
       </>
     ),
-    history: (
+    list: (
       <>
-        <path d="M3 12a9 9 0 1 0 2.6-6.4L3 8" />
-        <path d="M3 3v5h5M12 7v5l3 2" />
+        <path d="M9 5h12M9 12h12M9 19h12" />
+        <circle cx="4" cy="5" r="1" />
+        <circle cx="4" cy="12" r="1" />
+        <circle cx="4" cy="19" r="1" />
       </>
     ),
     bell: (
@@ -130,14 +121,14 @@ function Icon({ name, size = 19 }) {
   );
 }
 
-function FeatureCard({ icon, title, description }) {
+function Feature({ icon, title, description }) {
   return (
-    <div className="auth-feature">
-      <div className="auth-feature-icon">
-        <Icon name={icon} size={21} />
+    <div className="mp-feature">
+      <div className="mp-feature-icon">
+        <Icon name={icon} size={25} />
       </div>
 
-      <div>
+      <div className="mp-feature-text">
         <h3>{title}</h3>
         <p>{description}</p>
       </div>
@@ -145,7 +136,7 @@ function FeatureCard({ icon, title, description }) {
   );
 }
 
-function FieldInput({
+function Field({
   icon,
   placeholder,
   type = "text",
@@ -156,14 +147,10 @@ function FieldInput({
   autoComplete,
 }) {
   return (
-    <div className="auth-field-wrapper">
-      <div
-        className={`auth-input-box ${
-          error ? "auth-input-error" : ""
-        }`}
-      >
-        <span className="auth-input-icon">
-          <Icon name={icon} />
+    <div className="mp-field-group">
+      <div className={`mp-field ${error ? "mp-field-error" : ""}`}>
+        <span className="mp-field-icon">
+          <Icon name={icon} size={20} />
         </span>
 
         <input
@@ -171,37 +158,29 @@ function FieldInput({
           placeholder={placeholder}
           aria-label={placeholder}
           aria-invalid={Boolean(error)}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
           autoComplete={autoComplete}
+          value={value}
+          onChange={(event) => onChange(event.target.value)}
         />
 
-        {right && (
-          <div className="auth-input-right">
-            {right}
-          </div>
-        )}
+        {right && <div className="mp-field-right">{right}</div>}
       </div>
 
-      {error && (
-        <p className="auth-error">{error}</p>
-      )}
+      {error && <p className="mp-error">{error}</p>}
     </div>
   );
 }
 
-function PasswordToggle({ visible, onClick }) {
+function EyeButton({ visible, onClick }) {
   return (
     <button
       type="button"
-      className="auth-password-toggle"
+      className="mp-eye"
       onClick={onClick}
-      aria-label={
-        visible ? "Ocultar senha" : "Mostrar senha"
-      }
+      aria-label={visible ? "Ocultar senha" : "Mostrar senha"}
       aria-pressed={visible}
     >
-      <Icon name={visible ? "eye" : "eyeOff"} />
+      <Icon name={visible ? "eye" : "eyeOff"} size={20} />
     </button>
   );
 }
@@ -212,6 +191,7 @@ export default function Auth({ onAuth }) {
   const [showPw, setShowPw] = useState(false);
   const [showPw2, setShowPw2] = useState(false);
   const [registered, setRegistered] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPw, setLoginPw] = useState("");
@@ -224,8 +204,6 @@ export default function Auth({ onAuth }) {
   const [regPw, setRegPw] = useState("");
   const [regPw2, setRegPw2] = useState("");
   const [regErrors, setRegErrors] = useState({});
-
-  const [loading, setLoading] = useState(false);
 
   const cargos = [
     "Funcionário",
@@ -283,8 +261,8 @@ export default function Auth({ onAuth }) {
     return errors;
   };
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  const handleLogin = async (event) => {
+    event.preventDefault();
 
     if (loading) return;
 
@@ -305,17 +283,17 @@ export default function Auth({ onAuth }) {
 
       localStorage.setItem("token", token);
       onAuth(usuario);
-    } catch (err) {
+    } catch (error) {
       setLoginErrors({
-        pw: err.message || "Falha ao entrar",
+        pw: error.message || "Falha ao entrar",
       });
     } finally {
       setLoading(false);
     }
   };
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
+  const handleRegister = async (event) => {
+    event.preventDefault();
 
     if (loading) return;
 
@@ -336,19 +314,18 @@ export default function Auth({ onAuth }) {
         cargo: regCargo,
         senha: regPw,
       });
-    } catch (err) {
-      const campos = err.campos || {};
+    } catch (error) {
+      const campos = error.campos || {};
 
       setRegErrors(
-        err.campos
+        error.campos
           ? {
               nome: campos.nome,
               email: campos.email,
               pw: campos.senha,
             }
           : {
-              email:
-                err.message || "Erro ao cadastrar",
+              email: error.message || "Erro ao cadastrar",
             }
       );
 
@@ -376,744 +353,907 @@ export default function Auth({ onAuth }) {
   };
 
   return (
-    <main className="marmopedras-auth">
+    <main className="mp-auth">
       <style>{`
-        .marmopedras-auth {
+        .mp-auth {
+          --mp-wine: ${colors.wine};
+          --mp-wine-dark: ${colors.wineDark};
+          --mp-wine-soft: ${colors.wineSoft};
+          --mp-gold: ${colors.gold};
+
+          position: relative;
+          display: grid;
+          grid-template-columns: 54% 46%;
           min-height: 100vh;
           min-height: 100dvh;
-          display: grid;
-          grid-template-columns: minmax(0, 52%) minmax(0, 48%);
-          background: ${COLORS.background};
-          color: ${COLORS.text};
-          font-family: inherit;
+          overflow: hidden;
+          background: #eee7df;
+          color: #281b1d;
+          font-family: Arial, Helvetica, sans-serif;
         }
 
-        .marmopedras-auth * {
+        .mp-auth,
+        .mp-auth * {
           box-sizing: border-box;
         }
 
-        .auth-left {
+        .mp-left {
           position: relative;
-          isolation: isolate;
+          z-index: 2;
           display: flex;
           flex-direction: column;
           justify-content: space-between;
           min-width: 0;
           min-height: 100vh;
-          padding: clamp(32px, 4.2vw, 76px);
-          overflow: hidden;
-          background:
+          padding: clamp(38px, 4.4vw, 74px)
+                   clamp(40px, 6.5vw, 112px)
+                   48px;
+          background-color: #f1e9df;
+          background-image:
             linear-gradient(
-              125deg,
-              rgba(255, 253, 249, .96),
-              rgba(250, 246, 240, .90)
+              105deg,
+              rgba(255, 252, 247, .76),
+              rgba(250, 245, 237, .58)
             ),
-            url("${MARBLE_BG}") center/cover;
+            url("${MARBLE}");
+          background-position: center;
+          background-size: cover;
         }
 
-        .auth-left::before {
+        .mp-left::after {
           content: "";
           position: absolute;
-          z-index: -1;
           inset: 0;
+          z-index: -1;
           background:
-            linear-gradient(
-              130deg,
-              transparent 50%,
-              rgba(150, 115, 95, .065) 51%,
-              transparent 53%
-            ),
             radial-gradient(
-              ellipse at 100% 80%,
-              rgba(179, 143, 111, .13),
-              transparent 55%
+              ellipse at 8% 45%,
+              rgba(255,255,255,.66),
+              transparent 57%
             );
           pointer-events: none;
         }
 
-        .auth-brand {
+        .mp-brand {
+          width: fit-content;
           display: flex;
+          flex-direction: column;
           align-items: center;
-          gap: 15px;
+          text-align: center;
+          margin-left: clamp(50px, 8vw, 158px);
         }
 
-        .auth-brand-name {
+        .mp-brand-name {
           font-family: Georgia, "Times New Roman", serif;
-          font-size: clamp(25px, 2.2vw, 34px);
-          font-weight: 600;
-          letter-spacing: -.045em;
-          line-height: 1;
-          color: ${COLORS.wine};
+          font-size: clamp(28px, 2.3vw, 39px);
+          line-height: 1.05;
+          letter-spacing: -.04em;
+          color: var(--mp-wine-dark);
+          font-weight: 400;
+          margin-top: -1px;
         }
 
-        .auth-brand-tag {
-          margin-top: 9px;
+        .mp-brand-tag {
+          margin-top: 10px;
+          color: #675254;
           font-size: 9px;
-          line-height: 1.5;
-          letter-spacing: .19em;
           font-weight: 600;
-          color: #967f76;
+          letter-spacing: .2em;
+          white-space: nowrap;
         }
 
-        .auth-powered {
-          margin-top: 14px;
-          font-size: 11px;
-          color: #9e928b;
-          letter-spacing: .04em;
+        .mp-brand-powered {
+          margin-top: 15px;
+          font-size: 12px;
+          color: #968887;
         }
 
-        .auth-powered strong {
-          color: ${COLORS.wine};
+        .mp-brand-powered strong {
+          color: #37282a;
           font-weight: 800;
-          letter-spacing: .12em;
+          letter-spacing: .08em;
         }
 
-        .auth-hero {
-          max-width: 660px;
-          padding-top: 48px;
-          padding-bottom: 32px;
+        .mp-intro {
+          max-width: 675px;
+          margin-top: 30px;
+          margin-bottom: 34px;
         }
 
-        .auth-accent {
-          width: 56px;
-          height: 3px;
-          margin-bottom: 28px;
-          border-radius: 20px;
+        .mp-short-line {
+          display: block;
+          width: 62px;
+          height: 2px;
           background: linear-gradient(
-            90deg,
-            ${COLORS.wine},
-            ${COLORS.gold}
+            to right,
+            #823b47,
+            #d4b28d
           );
+          margin-bottom: 31px;
         }
 
-        .auth-headline {
-          max-width: 650px;
+        .mp-heading {
+          max-width: 680px;
+          color: #2c1319;
           font-family: Georgia, "Times New Roman", serif;
-          font-size: clamp(39px, 3.55vw, 66px);
-          line-height: 1.11;
-          letter-spacing: -.045em;
-          font-weight: 500;
-          color: ${COLORS.wineDark};
+          font-weight: 400;
+          font-size: clamp(38px, 3.05vw, 53px);
+          letter-spacing: -.038em;
+          line-height: 1.12;
         }
 
-        .auth-description {
-          margin-top: 25px;
-          max-width: 495px;
-          font-size: 15px;
-          line-height: 1.85;
-          color: #776c67;
+        .mp-description {
+          max-width: 490px;
+          margin-top: 23px;
+          font-size: clamp(14px, 1.15vw, 17px);
+          color: #685f5b;
+          line-height: 1.75;
         }
 
-        .auth-features {
+        .mp-features {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 13px;
-          margin-top: 40px;
-          max-width: 635px;
+          gap: 12px;
+          margin-top: 28px;
+          max-width: 640px;
         }
 
-        .auth-feature {
-          min-width: 0;
+        .mp-feature {
           display: flex;
-          align-items: flex-start;
-          gap: 13px;
+          align-items: center;
+          gap: 16px;
+          min-width: 0;
+          min-height: 99px;
           padding: 16px;
-          border-radius: 15px;
-          border: 1px solid rgba(112, 77, 60, .1);
-          background: rgba(255, 255, 255, .72);
-          box-shadow: 0 8px 26px rgba(76, 44, 33, .045);
-          transition:
-            transform .2s ease,
-            box-shadow .2s ease;
+          border-radius: 13px;
+          border: 1px solid rgba(255,255,255,.78);
+          background: rgba(255,255,255,.63);
+          box-shadow: 0 7px 28px rgba(74,53,42,.045);
+          backdrop-filter: blur(5px);
         }
 
-        .auth-feature:hover {
-          transform: translateY(-3px);
-          box-shadow:
-            0 12px 30px rgba(76, 44, 33, .09);
-        }
-
-        .auth-feature-icon {
-          width: 38px;
-          height: 38px;
-          flex: 0 0 38px;
+        .mp-feature-icon {
+          flex: 0 0 55px;
           display: flex;
           align-items: center;
           justify-content: center;
-          border-radius: 11px;
-          background: #f1e6dd;
-          color: ${COLORS.wine};
+          width: 55px;
+          height: 55px;
+          border-radius: 50%;
+          background: #e9ddd3;
+          color: #6a2833;
         }
 
-        .auth-feature h3 {
-          margin: 1px 0 5px;
-          font-size: 12px;
-          line-height: 1.4;
+        .mp-feature-text {
+          min-width: 0;
+        }
+
+        .mp-feature h3 {
+          font-size: 13px;
+          color: #242023;
           font-weight: 700;
-          color: ${COLORS.wineDark};
+          line-height: 1.4;
+          margin: 0 0 4px;
         }
 
-        .auth-feature p {
-          font-size: 11px;
-          line-height: 1.55;
-          color: #958b84;
+        .mp-feature p {
+          font-size: 12px;
+          line-height: 1.45;
+          color: #756b67;
+          margin: 0;
         }
 
-        .auth-left-footer {
+        .mp-left-footer {
           display: flex;
           align-items: center;
           gap: 15px;
-          margin-top: 35px;
-          color: #98887c;
           font-size: 10px;
+          font-weight: 600;
           letter-spacing: .2em;
-          font-weight: 700;
+          color: #756a66;
         }
 
-        .auth-left-footer::before {
+        .mp-left-footer::before {
           content: "";
-          width: 36px;
-          height: 1px;
-          background: ${COLORS.gold};
+          width: 51px;
+          height: 2px;
+          background: #8b4a50;
         }
 
-        .auth-right {
-          position: relative;
-          isolation: isolate;
-          min-width: 0;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 48px 30px;
-          background:
-            linear-gradient(
-              140deg,
-              rgba(91, 35, 48, .88),
-              rgba(54, 16, 27, .92)
-            ),
-            url("${MARBLE_BG}") center/cover;
-          overflow: hidden;
-        }
-
-        .auth-right::before {
-          content: "";
-          position: absolute;
-          z-index: -1;
-          inset: 0;
-          background:
-            linear-gradient(
-              155deg,
-              transparent 18%,
-              rgba(234, 198, 171, .14) 18.15%,
-              transparent 18.4%,
-              transparent 79%,
-              rgba(234, 198, 171, .13) 79.2%,
-              transparent 79.5%
-            ),
-            radial-gradient(
-              circle at 90% 15%,
-              rgba(207, 160, 123, .24),
-              transparent 45%
-            );
-        }
-
-        .auth-right::after {
-          content: "";
-          position: absolute;
-          width: 60%;
-          height: 65%;
-          top: -30%;
-          right: -30%;
-          border: 1px solid rgba(255,255,255,.13);
-          border-radius: 50%;
-          pointer-events: none;
-        }
-
-        .auth-card {
+        .mp-right {
           position: relative;
           z-index: 1;
-          width: 100%;
-          max-width: 475px;
-          padding: clamp(26px, 3.1vw, 45px);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-width: 0;
+          min-height: 100vh;
+          padding: 48px 28px;
           background:
             linear-gradient(
               145deg,
-              rgba(255, 253, 249, .98),
-              rgba(249, 245, 239, .96)
-            );
-          border: 1px solid rgba(255,255,255,.85);
-          border-radius: 25px;
-          box-shadow:
-            0 28px 85px rgba(29, 7, 13, .31),
-            0 6px 20px rgba(29, 7, 13, .12);
+              rgba(63,15,26,.90),
+              rgba(46,10,19,.91)
+            ),
+            url("${MARBLE}") center / cover;
         }
 
-        .auth-tabs {
+        .mp-right::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background:
+            linear-gradient(
+              110deg,
+              rgba(103,38,49,.12),
+              transparent 50%
+            ),
+            radial-gradient(
+              ellipse at 75% 42%,
+              rgba(0,0,0,.13),
+              transparent 60%
+            );
+          pointer-events: none;
+        }
+
+        .mp-stone-one {
+          position: absolute;
+          z-index: 1;
+          left: -13%;
+          top: 3%;
+          width: 55%;
+          height: 68%;
+          transform: skewY(-12deg);
+          background:
+            linear-gradient(
+              130deg,
+              rgba(83,64,55,.3),
+              rgba(239,226,207,.16)
+            ),
+            url("${MARBLE}") 64% center / cover;
+          box-shadow:
+            15px 20px 25px rgba(22,8,10,.2),
+            inset -5px 0 0 rgba(245,235,220,.72);
+          filter: sepia(.55) saturate(.55) brightness(.81);
+        }
+
+        .mp-stone-two {
+          position: absolute;
+          z-index: 1;
+          left: -34%;
+          bottom: -25%;
+          width: 115%;
+          height: 43%;
+          transform: rotate(-23deg);
+          background:
+            linear-gradient(
+              rgba(255,251,244,.12),
+              rgba(220,202,184,.19)
+            ),
+            url("${MARBLE}") center / cover;
+          border-top: 7px solid rgba(255,250,239,.78);
+          box-shadow: 0 -15px 35px rgba(31,12,14,.27);
+          filter: sepia(.35) saturate(.58) brightness(1.03);
+        }
+
+        .mp-stone-three {
+          position: absolute;
+          z-index: 1;
+          right: -27%;
+          bottom: -21%;
+          width: 75%;
+          height: 36%;
+          transform: rotate(25deg);
+          background:
+            linear-gradient(
+              rgba(255,249,239,.12),
+              rgba(206,181,165,.15)
+            ),
+            url("${MARBLE}") center / cover;
+          border-top: 7px solid rgba(255,246,230,.8);
+          box-shadow: 0 -12px 30px rgba(27,11,14,.3);
+          filter: sepia(.43) saturate(.5) brightness(1.1);
+        }
+
+        .mp-wine-line {
+          position: absolute;
+          z-index: 1;
+          right: 20%;
+          top: 0;
+          height: 33%;
+          width: 2px;
+          background: linear-gradient(
+            transparent,
+            rgba(211,162,121,.72),
+            transparent
+          );
+          box-shadow: 0 0 15px rgba(220,172,126,.4);
+        }
+
+        .mp-card {
+          position: relative;
+          z-index: 5;
+          width: 100%;
+          max-width: 530px;
+          padding: clamp(30px, 3vw, 43px);
+          border-radius: 24px;
+          border: 1px solid rgba(255,255,255,.9);
+          background:
+            linear-gradient(
+              125deg,
+              rgba(255,253,250,.97),
+              rgba(249,244,238,.96)
+            );
+          box-shadow:
+            0 30px 75px rgba(25,5,10,.32),
+            0 6px 20px rgba(25,5,10,.09);
+        }
+
+        .mp-tabs {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 5px;
-          padding: 5px;
-          margin-bottom: 36px;
-          background: #eee7df;
-          border-radius: 13px;
+          padding: 4px;
+          gap: 0;
+          background: #eee8e2;
+          border-radius: 12px;
+          margin-bottom: 40px;
+          overflow: hidden;
         }
 
-        .auth-tab {
-          min-height: 43px;
-          padding: 9px;
-          border: 0;
-          border-radius: 10px;
+        .mp-tab {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          min-height: 51px;
           background: transparent;
-          color: #80716e;
-          font-size: 13px;
-          font-weight: 700;
+          border: 0;
+          border-radius: 9px;
+          color: #796b69;
+          font-size: 15px;
+          font-weight: 500;
           cursor: pointer;
           transition: all .2s ease;
         }
 
-        .auth-tab.active {
-          color: white;
+        .mp-tab.active {
           background: linear-gradient(
-            125deg,
-            ${COLORS.wine},
-            ${COLORS.wineLight}
+            115deg,
+            #6b1825,
+            #4f111c
           );
-          box-shadow:
-            0 4px 12px rgba(88, 30, 43, .21);
+          color: #fff;
+          box-shadow: 0 7px 15px rgba(83,19,30,.22);
         }
 
-        .auth-title {
+        .mp-card-title {
           font-family: Georgia, "Times New Roman", serif;
-          color: ${COLORS.wineDark};
-          font-size: clamp(27px, 2.5vw, 35px);
-          font-weight: 600;
-          letter-spacing: -.035em;
-          line-height: 1.2;
+          color: #30171b;
+          font-size: clamp(30px, 2.7vw, 40px);
+          letter-spacing: -.04em;
+          font-weight: 400;
+          line-height: 1.15;
+          margin: 0;
         }
 
-        .auth-subtitle {
-          margin-top: 8px;
-          margin-bottom: 29px;
-          font-size: 13px;
-          line-height: 1.6;
-          color: ${COLORS.muted};
+        .mp-card-subtitle {
+          margin: 10px 0 29px;
+          font-size: 15px;
+          line-height: 1.5;
+          color: #746d6b;
         }
 
-        .auth-form {
+        .mp-form {
           display: flex;
           flex-direction: column;
           gap: 15px;
         }
 
-        .auth-field-wrapper {
-          min-width: 0;
-        }
-
-        .auth-input-box {
+        .mp-field {
           display: flex;
           align-items: center;
-          min-height: 53px;
-          border: 1px solid #e5dad1;
-          border-radius: 12px;
-          background: rgba(255,255,255,.9);
-          transition:
-            border-color .2s,
-            box-shadow .2s;
+          min-height: 57px;
+          width: 100%;
+          border-radius: 13px;
+          border: 1px solid rgba(219,211,205,.86);
+          background: rgba(255,255,255,.83);
+          box-shadow: 0 9px 18px rgba(36,25,21,.055);
+          overflow: hidden;
+          transition: border-color .2s, box-shadow .2s;
         }
 
-        .auth-input-box:focus-within {
-          border-color: ${COLORS.wineLight};
+        .mp-field:focus-within {
+          border-color: #aa7b77;
           box-shadow:
-            0 0 0 3px rgba(88,30,43,.08);
+            0 0 0 3px rgba(106,33,46,.085),
+            0 9px 18px rgba(36,25,21,.045);
         }
 
-        .auth-input-box.auth-input-error {
-          border-color: #c76565;
+        .mp-field-error {
+          border-color: #c35f68;
         }
 
-        .auth-input-icon {
+        .mp-field-icon {
+          color: #694049;
+          padding: 0 16px 0 20px;
           display: flex;
           align-items: center;
-          justify-content: center;
-          padding-left: 16px;
-          padding-right: 11px;
-          color: #aa9185;
+          flex-shrink: 0;
         }
 
-        .auth-input-box input {
+        .mp-field input {
           flex: 1;
+          width: 100%;
           min-width: 0;
-          min-height: 51px;
-          padding: 10px 8px 10px 0;
-          background: transparent;
-          border: none;
-          outline: none;
-          color: ${COLORS.text};
-          font-size: 13px;
-        }
-
-        .auth-input-box input::placeholder {
-          color: #aa9e97;
-        }
-
-        .auth-input-right {
-          display: flex;
-          align-items: center;
-          padding-right: 12px;
-        }
-
-        .auth-password-toggle {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          width: 35px;
-          height: 35px;
+          min-height: 55px;
+          padding: 12px 8px 12px 0;
           border: 0;
+          outline: 0;
+          background: transparent;
+          color: #302226;
+          font-size: 14px;
+          font-family: inherit;
+          box-shadow: none;
+        }
+
+        .mp-field input::placeholder {
+          color: #a49a95;
+        }
+
+        .mp-field input:-webkit-autofill,
+        .mp-field input:-webkit-autofill:hover,
+        .mp-field input:-webkit-autofill:focus,
+        .mp-field input:-webkit-autofill:active {
+          -webkit-box-shadow:
+            0 0 0 1000px #fffefa inset !important;
+          -webkit-text-fill-color:
+            #302226 !important;
+          caret-color: #302226;
+          transition:
+            background-color 9999s ease-out;
+          border-radius: 0;
+        }
+
+        .mp-field-right {
+          display: flex;
+          padding-right: 11px;
+          align-items: center;
+          flex-shrink: 0;
+        }
+
+        .mp-eye {
+          width: 36px;
+          height: 36px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: none;
           border-radius: 8px;
           background: transparent;
-          color: #947d76;
+          color: #7b6265;
           cursor: pointer;
         }
 
-        .auth-password-toggle:hover {
-          background: #f4ece6;
-          color: ${COLORS.wine};
+        .mp-eye:hover {
+          color: #591c29;
+          background: #f3ebe5;
         }
 
-        .auth-error {
-          margin-top: 6px;
-          padding-left: 5px;
-          color: #bf4c4c;
-          font-size: 11px;
+        .mp-error {
+          padding: 6px 4px 0;
+          color: #ba4455;
+          font-size: 12px;
+          margin: 0;
         }
 
-        .auth-forgot-wrapper {
+        .mp-forgot {
           display: flex;
           justify-content: flex-end;
-          margin-top: -4px;
+          margin-top: 0;
+          margin-bottom: 4px;
         }
 
-        .auth-forgot-password {
-          border: none;
+        .mp-forgot button {
+          padding: 2px;
+          border: 0;
           background: transparent;
-          color: #8e5360;
-          font-size: 12px;
-          font-weight: 600;
-          padding: 4px 0;
-          cursor: not-allowed;
-          opacity: .75;
-        }
-
-        .auth-select {
-          width: 100%;
-          min-height: 53px;
-          padding: 0 14px;
-          border: 1px solid #e5dad1;
-          border-radius: 12px;
-          background: white;
-          color: ${COLORS.text};
+          color: #71303e;
           font-size: 13px;
-          outline: none;
+          font-weight: 500;
+          cursor: not-allowed;
+          opacity: .76;
         }
 
-        .auth-select:focus {
-          border-color: ${COLORS.wineLight};
-          box-shadow:
-            0 0 0 3px rgba(88,30,43,.08);
-        }
-
-        .auth-submit {
-          width: 100%;
-          min-height: 53px;
+        .mp-submit {
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 12px;
-          margin-top: 10px;
-          padding: 13px 16px;
-          border: none;
+          gap: 18px;
+          position: relative;
+          width: 100%;
+          min-height: 57px;
+          margin-top: 4px;
+          padding: 14px 48px 14px 18px;
+          border: 0;
           border-radius: 12px;
-          color: white;
           background: linear-gradient(
             115deg,
-            ${COLORS.wine},
-            ${COLORS.wineLight}
+            #701723,
+            #490b15
           );
-          font-size: 13px;
-          font-weight: 700;
+          color: white;
+          font-size: 15px;
+          font-weight: 600;
           cursor: pointer;
-          box-shadow:
-            0 9px 19px rgba(88,30,43,.19);
-          transition:
-            transform .2s,
-            box-shadow .2s;
+          box-shadow: 0 10px 23px rgba(81,18,28,.18);
+          transition: transform .2s, box-shadow .2s;
         }
 
-        .auth-submit:hover:not(:disabled) {
+        .mp-submit svg {
+          position: absolute;
+          right: 24px;
+        }
+
+        .mp-submit:hover:not(:disabled) {
           transform: translateY(-2px);
-          box-shadow:
-            0 13px 24px rgba(88,30,43,.26);
+          box-shadow: 0 14px 28px rgba(81,18,28,.25);
         }
 
-        .auth-submit:disabled {
-          opacity: .65;
-          cursor: not-allowed;
+        .mp-submit:disabled {
+          cursor: wait;
+          opacity: .7;
         }
 
-        .auth-form-note {
-          margin-top: 4px;
-          font-size: 11px;
-          line-height: 1.7;
-          color: #958781;
+        .mp-select {
+          width: 100%;
+          min-height: 55px;
+          padding: 0 15px;
+          border: 1px solid #ddd3cc;
+          border-radius: 12px;
+          background: rgba(255,255,255,.9);
+          color: #35262b;
+          font-size: 14px;
+          outline: 0;
+        }
+
+        .mp-select:focus {
+          border-color: #98606c;
+        }
+
+        .mp-terms {
           text-align: center;
+          font-size: 11px;
+          color: #928781;
+          line-height: 1.6;
+          margin-top: 2px;
         }
 
-        .auth-card-footer {
+        .mp-card-footer {
           margin-top: 32px;
-          padding-top: 20px;
-          border-top: 1px solid ${COLORS.border};
-          color: #a79a91;
+          padding-top: 21px;
           text-align: center;
-          font-size: 11px;
+          border-top: 1px solid #e9e0d9;
+          font-size: 12px;
+          color: #978a85;
         }
 
-        .auth-card-footer strong {
-          color: ${COLORS.wine};
-          letter-spacing: .13em;
+        .mp-card-footer strong {
+          color: #372528;
+          font-weight: 800;
+          letter-spacing: .08em;
         }
 
-        .auth-success {
+        .mp-success {
           display: flex;
           flex-direction: column;
           align-items: center;
-          gap: 16px;
-          padding: 18px 0;
+          gap: 15px;
+          padding: 26px 0;
           text-align: center;
         }
 
-        .auth-success-icon {
-          width: 64px;
-          height: 64px;
+        .mp-success-icon {
           display: flex;
           align-items: center;
           justify-content: center;
+          width: 68px;
+          height: 68px;
           border-radius: 50%;
-          background: #f1e6dc;
-          color: ${COLORS.wine};
+          background: #e8d9cd;
+          color: #5b2430;
         }
 
-        .auth-success p {
-          color: ${COLORS.muted};
-          font-size: 13px;
-          line-height: 1.7;
+        .mp-success p {
+          color: #827774;
+          line-height: 1.65;
+          font-size: 14px;
         }
 
-        @media (max-width: 1200px) {
-          .marmopedras-auth {
-            grid-template-columns:
-              minmax(0, 50%) minmax(0, 50%);
+        @media (max-width: 1300px) {
+          .mp-left {
+            padding-left: 48px;
+            padding-right: 48px;
           }
 
-          .auth-left {
-            padding: 32px;
+          .mp-brand {
+            margin-left: 65px;
           }
 
-          .auth-headline {
-            font-size: clamp(35px, 3.5vw, 48px);
+          .mp-heading {
+            font-size: clamp(37px, 3.25vw, 47px);
           }
 
-          .auth-features {
-            gap: 9px;
-          }
-
-          .auth-feature {
+          .mp-feature {
             padding: 12px;
-            gap: 9px;
+            gap: 10px;
           }
 
-          .auth-feature-icon {
-            width: 33px;
-            height: 33px;
-            flex-basis: 33px;
+          .mp-feature-icon {
+            width: 45px;
+            height: 45px;
+            flex-basis: 45px;
           }
 
-          .auth-right {
-            padding: 28px;
+          .mp-right {
+            padding: 35px 20px;
+          }
+
+          .mp-card {
+            padding: 30px;
           }
         }
 
-        @media (max-width: 900px) {
-          .marmopedras-auth {
-            display: block;
+        @media (max-width: 1050px) {
+          .mp-auth {
+            grid-template-columns: 50% 50%;
           }
 
-          .auth-left {
+          .mp-left {
+            padding: 35px 28px;
+          }
+
+          .mp-brand {
+            margin-left: 30px;
+          }
+
+          .mp-heading {
+            font-size: 37px;
+          }
+
+          .mp-features {
+            gap: 9px;
+          }
+
+          .mp-feature {
+            flex-direction: column;
+            align-items: flex-start;
+            min-height: 115px;
+          }
+
+          .mp-card {
+            padding: 27px;
+          }
+
+          .mp-card-title {
+            font-size: 31px;
+          }
+        }
+
+        @media (max-width: 800px) {
+          .mp-auth {
+            display: flex;
+            flex-direction: column;
+            overflow: visible;
+          }
+
+          .mp-left {
             min-height: auto;
-            padding: 35px 28px 38px;
+            padding: 32px 28px 38px;
           }
 
-          .auth-brand {
-            margin-bottom: 35px;
+          .mp-brand {
+            align-self: center;
+            margin: 0;
           }
 
-          .auth-hero {
-            padding: 0;
-            max-width: 700px;
+          .mp-intro {
+            margin: 42px auto 0;
+            width: 100%;
+            max-width: 620px;
           }
 
-          .auth-headline {
-            max-width: 600px;
-            font-size: clamp(36px, 5vw, 49px);
+          .mp-heading {
+            font-size: clamp(35px, 5.3vw, 44px);
           }
 
-          .auth-description {
-            margin-top: 17px;
+          .mp-description {
+            max-width: 550px;
           }
 
-          .auth-features {
-            margin-top: 26px;
-            max-width: 700px;
+          .mp-feature {
+            flex-direction: row;
+            align-items: center;
+            min-height: 88px;
           }
 
-          .auth-left-footer {
-            margin-top: 28px;
+          .mp-left-footer {
+            margin-top: 35px;
           }
 
-          .auth-right {
+          .mp-right {
             min-height: auto;
-            padding: 48px 22px;
+            padding: 55px 25px;
           }
 
-          .auth-card {
+          .mp-card {
             max-width: 530px;
+          }
+
+          .mp-stone-one {
+            left: -4%;
+            width: 60%;
           }
         }
 
         @media (max-width: 540px) {
-          .auth-left {
-            padding: 25px 20px 30px;
+          .mp-left {
+            padding: 28px 19px 31px;
           }
 
-          .auth-brand-name {
-            font-size: 27px;
+          .mp-brand-name {
+            font-size: 30px;
           }
 
-          .auth-brand-tag {
+          .mp-brand-tag {
             font-size: 8px;
           }
 
-          .auth-headline {
-            font-size: clamp(32px, 8vw, 42px);
+          .mp-intro {
+            margin-top: 37px;
           }
 
-          .auth-description {
+          .mp-heading {
+            font-size: 34px;
+          }
+
+          .mp-description {
             font-size: 13px;
+            margin-top: 18px;
           }
 
-          .auth-features {
-            grid-template-columns: 1fr 1fr;
+          .mp-features {
+            grid-template-columns: repeat(2, minmax(0,1fr));
+            gap: 9px;
+          }
+
+          .mp-feature {
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 12px;
             gap: 8px;
           }
 
-          .auth-feature {
-            flex-direction: column;
-            padding: 13px;
+          .mp-feature-icon {
+            width: 40px;
+            height: 40px;
+            flex-basis: 40px;
           }
 
-          .auth-feature h3 {
+          .mp-feature h3 {
+            font-size: 12px;
+          }
+
+          .mp-feature p {
             font-size: 11px;
           }
 
-          .auth-feature p {
-            font-size: 10px;
-          }
-
-          .auth-left-footer {
+          .mp-left-footer {
             font-size: 9px;
           }
 
-          .auth-right {
-            padding: 30px 15px 42px;
+          .mp-right {
+            padding: 32px 13px 45px;
           }
 
-          .auth-card {
-            padding: 25px 20px;
-            border-radius: 19px;
+          .mp-card {
+            padding: 27px 20px;
+            border-radius: 20px;
           }
 
-          .auth-tabs {
-            margin-bottom: 28px;
+          .mp-tabs {
+            margin-bottom: 31px;
           }
 
-          .auth-title {
-            font-size: 29px;
+          .mp-tab {
+            min-height: 45px;
+            font-size: 13px;
+          }
+
+          .mp-card-title {
+            font-size: 30px;
+          }
+
+          .mp-card-subtitle {
+            font-size: 13px;
+          }
+
+          .mp-field {
+            min-height: 52px;
+          }
+
+          .mp-field input {
+            min-height: 50px;
+          }
+
+          .mp-submit {
+            min-height: 53px;
+            font-size: 13px;
           }
         }
 
         @media (prefers-reduced-motion: reduce) {
-          .marmopedras-auth *,
-          .marmopedras-auth *::before,
-          .marmopedras-auth *::after {
-            animation-duration: .01ms !important;
-            transition-duration: .01ms !important;
+          .mp-auth *,
+          .mp-auth *::before,
+          .mp-auth *::after {
+            transition: none !important;
           }
         }
       `}</style>
 
-      <section className="auth-left">
-        <header>
-          <div className="auth-brand">
-            <LogoM size={58} />
+      <section className="mp-left">
+        <header className="mp-brand">
+          <LogoM size={65} />
 
-            <div>
-              <div className="auth-brand-name">
-                Marmopedras
-              </div>
-
-              <div className="auth-brand-tag">
-                PEDRAS QUE CONSTROEM HISTÓRIAS
-              </div>
-            </div>
+          <div className="mp-brand-name">
+            Marmopedras
           </div>
 
-          <div className="auth-powered">
+          <div className="mp-brand-tag">
+            PEDRAS QUE CONSTROEM HISTÓRIAS
+          </div>
+
+          <div className="mp-brand-powered">
             powered by <strong>NEXT</strong>
           </div>
         </header>
 
-        <div className="auth-hero">
-          <div className="auth-accent" />
+        <div className="mp-intro">
+          <span className="mp-short-line" />
 
-          <h2 className="auth-headline">
-            Controle e sofisticação para o estoque de pedras.
+          <h2 className="mp-heading">
+            Controle e sofisticação
+            <br />
+            para o estoque de pedras.
           </h2>
 
-          <p className="auth-description">
-            Gerencie entradas, saídas, transferências e a
-            distribuição do seu estoque com mais organização,
-            segurança e eficiência.
+          <p className="mp-description">
+            Gerencie entradas, saídas, transferências
+            <br className="hidden xl:block" />
+            {" "}e a distribuição do seu estoque com mais
+            <br className="hidden xl:block" />
+            {" "}organização, segurança e eficiência.
           </p>
 
-          <div className="auth-features">
-            <FeatureCard
+          <div className="mp-features">
+            <Feature
               icon="box"
               title="Gestão de estoque"
               description="Visualize e organize seus materiais"
             />
 
-            <FeatureCard
-              icon="history"
+            <Feature
+              icon="list"
               title="Histórico completo"
               description="Acompanhe todas as movimentações"
             />
 
-            <FeatureCard
+            <Feature
               icon="bell"
               title="Alertas de saldo"
-              description="Evite a falta de materiais no estoque"
+              description="Evite falta de materiais no estoque"
             />
 
-            <FeatureCard
+            <Feature
               icon="transfer"
               title="Controle de movimentações"
               description="Entradas, saídas e transferências"
@@ -1121,57 +1261,55 @@ export default function Auth({ onAuth }) {
           </div>
         </div>
 
-        <footer className="auth-left-footer">
+        <footer className="mp-left-footer">
           QUALIDADE EM CADA DETALHE
         </footer>
       </section>
 
-      <section className="auth-right">
-        <div className="auth-card">
-          <div
-            className="auth-tabs"
-            role="group"
-            aria-label="Acesso"
-          >
+      <section className="mp-right">
+        <div className="mp-stone-one" aria-hidden="true" />
+        <div className="mp-stone-two" aria-hidden="true" />
+        <div className="mp-stone-three" aria-hidden="true" />
+        <div className="mp-wine-line" aria-hidden="true" />
+
+        <div className="mp-card">
+          <div className="mp-tabs" role="group" aria-label="Acesso">
             <button
               type="button"
-              onClick={() => changeMode("login")}
-              className={`auth-tab ${
+              className={`mp-tab ${
                 mode === "login" ? "active" : ""
               }`}
               aria-pressed={mode === "login"}
+              onClick={() => changeMode("login")}
             >
               Entrar
             </button>
 
             <button
               type="button"
-              onClick={() => changeMode("register")}
-              className={`auth-tab ${
+              className={`mp-tab ${
                 mode === "register" ? "active" : ""
               }`}
               aria-pressed={mode === "register"}
+              onClick={() => changeMode("register")}
             >
               Criar conta
             </button>
           </div>
 
           {mode === "login" && (
-            <form
-              onSubmit={handleLogin}
-              className="auth-form"
-            >
+            <form onSubmit={handleLogin} className="mp-form">
               <div>
-                <h1 className="auth-title">
+                <h1 className="mp-card-title">
                   Bem-vindo de volta
                 </h1>
 
-                <p className="auth-subtitle">
+                <p className="mp-card-subtitle">
                   Acesse sua conta Marmopedras
                 </p>
               </div>
 
-              <FieldInput
+              <Field
                 icon="mail"
                 placeholder="E-mail"
                 type="email"
@@ -1187,7 +1325,7 @@ export default function Auth({ onAuth }) {
                 error={loginErrors.email}
               />
 
-              <FieldInput
+              <Field
                 icon="lock"
                 placeholder="Senha"
                 type={showPw ? "text" : "password"}
@@ -1202,7 +1340,7 @@ export default function Auth({ onAuth }) {
                 }}
                 error={loginErrors.pw}
                 right={
-                  <PasswordToggle
+                  <EyeButton
                     visible={showPw}
                     onClick={() =>
                       setShowPw((prev) => !prev)
@@ -1211,12 +1349,11 @@ export default function Auth({ onAuth }) {
                 }
               />
 
-              <div className="auth-forgot-wrapper">
+              <div className="mp-forgot">
                 <button
                   type="button"
-                  className="auth-forgot-password"
                   disabled
-                  title="Recuperação de senha em desenvolvimento"
+                  title="Recuperação de senha ainda não configurada"
                 >
                   Esqueceu a senha?
                 </button>
@@ -1224,7 +1361,7 @@ export default function Auth({ onAuth }) {
 
               <button
                 type="submit"
-                className="auth-submit"
+                className="mp-submit"
                 disabled={loading}
               >
                 {loading
@@ -1232,7 +1369,7 @@ export default function Auth({ onAuth }) {
                   : "Entrar no sistema"}
 
                 {!loading && (
-                  <Icon name="arrow" size={18} />
+                  <Icon name="arrow" size={20} />
                 )}
               </button>
             </form>
@@ -1241,19 +1378,19 @@ export default function Auth({ onAuth }) {
           {mode === "register" && !registered && (
             <form
               onSubmit={handleRegister}
-              className="auth-form"
+              className="mp-form"
             >
               <div>
-                <h1 className="auth-title">
+                <h1 className="mp-card-title">
                   Criar conta
                 </h1>
 
-                <p className="auth-subtitle">
-                  Preencha seus dados para solicitar acesso
+                <p className="mp-card-subtitle">
+                  Preencha os dados para solicitar acesso
                 </p>
               </div>
 
-              <FieldInput
+              <Field
                 icon="user"
                 placeholder="Nome completo *"
                 autoComplete="name"
@@ -1268,7 +1405,7 @@ export default function Auth({ onAuth }) {
                 error={regErrors.nome}
               />
 
-              <FieldInput
+              <Field
                 icon="mail"
                 placeholder="E-mail *"
                 type="email"
@@ -1284,7 +1421,7 @@ export default function Auth({ onAuth }) {
                 error={regErrors.email}
               />
 
-              <FieldInput
+              <Field
                 icon="phone"
                 placeholder="Telefone / WhatsApp *"
                 type="tel"
@@ -1301,16 +1438,14 @@ export default function Auth({ onAuth }) {
               />
 
               <select
-                className="auth-select"
+                className="mp-select"
                 aria-label="Cargo"
                 value={regCargo}
-                onChange={(e) =>
-                  setRegCargo(e.target.value)
+                onChange={(event) =>
+                  setRegCargo(event.target.value)
                 }
               >
-                <option value="">
-                  Selecione seu cargo
-                </option>
+                <option value="">Selecione seu cargo</option>
 
                 {cargos.map((cargo) => (
                   <option key={cargo} value={cargo}>
@@ -1319,7 +1454,7 @@ export default function Auth({ onAuth }) {
                 ))}
               </select>
 
-              <FieldInput
+              <Field
                 icon="lock"
                 placeholder="Senha * (mín. 6 caracteres)"
                 type={showPw ? "text" : "password"}
@@ -1334,7 +1469,7 @@ export default function Auth({ onAuth }) {
                 }}
                 error={regErrors.pw}
                 right={
-                  <PasswordToggle
+                  <EyeButton
                     visible={showPw}
                     onClick={() =>
                       setShowPw((prev) => !prev)
@@ -1343,7 +1478,7 @@ export default function Auth({ onAuth }) {
                 }
               />
 
-              <FieldInput
+              <Field
                 icon="lock"
                 placeholder="Confirmar senha *"
                 type={showPw2 ? "text" : "password"}
@@ -1358,7 +1493,7 @@ export default function Auth({ onAuth }) {
                 }}
                 error={regErrors.pw2}
                 right={
-                  <PasswordToggle
+                  <EyeButton
                     visible={showPw2}
                     onClick={() =>
                       setShowPw2((prev) => !prev)
@@ -1369,7 +1504,7 @@ export default function Auth({ onAuth }) {
 
               <button
                 type="submit"
-                className="auth-submit"
+                className="mp-submit"
                 disabled={loading}
               >
                 {loading
@@ -1377,11 +1512,11 @@ export default function Auth({ onAuth }) {
                   : "Solicitar acesso"}
 
                 {!loading && (
-                  <Icon name="arrow" size={18} />
+                  <Icon name="arrow" size={20} />
                 )}
               </button>
 
-              <p className="auth-form-note">
+              <p className="mp-terms">
                 O cadastro está sujeito às regras de
                 acesso da Marmopedras.
               </p>
@@ -1389,15 +1524,12 @@ export default function Auth({ onAuth }) {
           )}
 
           {mode === "register" && registered && (
-            <div
-              className="auth-success"
-              role="status"
-            >
-              <div className="auth-success-icon">
-                <IconCheck size={28} />
+            <div className="mp-success" role="status">
+              <div className="mp-success-icon">
+                <IconCheck size={29} />
               </div>
 
-              <h2 className="auth-title">
+              <h2 className="mp-card-title">
                 Conta criada!
               </h2>
 
@@ -1409,7 +1541,7 @@ export default function Auth({ onAuth }) {
             </div>
           )}
 
-          <footer className="auth-card-footer">
+          <footer className="mp-card-footer">
             powered by <strong>NEXT</strong>
           </footer>
         </div>
