@@ -22,8 +22,7 @@ import {
 const locais = [
   "Depósito A",
   "Depósito B",
-  "Depósito C",
-  "Depósito D"
+  "Depósito C"
 ];
 
 const unidadeChapas = (quantidade) =>
@@ -140,12 +139,12 @@ export default function Transferencia() {
       e.material = "Selecione um material válido";
     }
 
-    if (!form.origem) {
-      e.origem = "Selecione a origem";
+    if (!form.origem || !locais.includes(form.origem)) {
+      e.origem = "Selecione uma origem válida";
     }
 
-    if (!form.destino) {
-      e.destino = "Selecione o destino";
+    if (!form.destino || !locais.includes(form.destino)) {
+      e.destino = "Selecione um destino válido";
     }
 
     if (
@@ -351,7 +350,7 @@ export default function Transferencia() {
               </div>
 
               <div
-                className="grid grid-cols-2 sm:grid-cols-4"
+                className="grid grid-cols-1 sm:grid-cols-3"
                 style={{
                   borderTop:
                     "1px solid rgba(201,151,110,0.1)"
@@ -661,7 +660,7 @@ export default function Transferencia() {
                         color: "#374151"
                       }}
                     >
-                      {t.qtd} {unidadeChapas(t.qtd)}
+                      {t.qtd}
                     </span>
                   </div>
 
