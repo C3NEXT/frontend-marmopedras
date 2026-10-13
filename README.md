@@ -209,7 +209,7 @@ Entre eles:
 </table>
 
 ---
-## 🛠️ Repositório Frontend: https://github.com/C3NEXT/backend-marmopedras
+## 🛠️ Repositório Backend: https://github.com/C3NEXT/backend-marmopedras
 ---
 
 # 🧭 Fluxo do Sistema
