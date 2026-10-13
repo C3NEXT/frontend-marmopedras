@@ -22,12 +22,8 @@ import { CodigoBadge } from "../components/MaterialInfo";
 const locais = [
   "Depósito A",
   "Depósito B",
-  "Depósito C",
-  "Depósito D"
+  "Depósito C"
 ];
-
-const unidadeChapas = (qtd) =>
-  Number(qtd) === 1 ? "chapa" : "chapas";
 
 const SuccessToast = ({ onClose, detalhe }) => (
   <div
@@ -153,6 +149,7 @@ export default function RegistrarEntrada() {
       tipo: "",
       unidade: "chapas"
     }));
+
     setErrors({});
   };
 
@@ -808,7 +805,7 @@ export default function RegistrarEntrada() {
                         borderRadius: "99px"
                       }}
                     >
-                      {e.qtd} {unidadeChapas(e.qtd)}
+                      {e.qtd}
                     </span>
                   </div>
 
