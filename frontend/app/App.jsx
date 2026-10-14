@@ -528,13 +528,18 @@ function PainelGeral({ navigate }) {
         </div>
 
         <div className="relative z-10 flex flex-col items-end px-8 pb-5 pt-5 gap-3">
-          <div
-  className="text-right text-xs font-semibold uppercase"
+        <div
+  className="text-right uppercase"
   style={{
-    color: "#4b1823",
+    color: "#3d0f16",
+    fontSize: "13px",
+    fontWeight: 800,
     letterSpacing: "0.18em",
-    lineHeight: "1.7",
-    textShadow: "0 1px 3px rgba(255,255,255,0.9)",
+    lineHeight: "1.9",
+    padding: "12px 16px",
+    background:
+      "linear-gradient(90deg, rgba(250,246,240,0), rgba(250,246,240,0.94))",
+    textShadow: "0 1px 1px rgba(255,255,255,0.8)",
   }}
 >
   Qualidade
@@ -543,11 +548,6 @@ function PainelGeral({ navigate }) {
   <br />
   detalhe
 </div>
-
-        <div className="flex items-center gap-4">
-  <span
-    aria-label="Notificações"
-    className="flex items-center justify-center"
     style={{ color: "#4b1823" }}
   >
     <IconBell />
