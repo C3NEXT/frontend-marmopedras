@@ -11,45 +11,37 @@ const colors = {
   wineSoft: "#782f3c",
   gold: "#b68a68",
 };
-
 function LogoM({ size = 58 }) {
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 64 64"
-      fill="none"
-      aria-hidden="true"
-    >
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true">
       <defs>
-        <linearGradient id="mpLogoWine" x1="8" y1="10" x2="56" y2="53">
-          <stop offset="0" stopColor="#4a1220" />
-          <stop offset=".55" stopColor="#7a3340" />
-          <stop offset="1" stopColor="#a8606a" />
+        <linearGradient id="mpLogoLeft" gradientUnits="userSpaceOnUse" x1="8" y1="10" x2="32" y2="54">
+          <stop offset="0" stopColor="#3a0b17" />
+          <stop offset="1" stopColor="#6e2535" />
         </linearGradient>
-        <linearGradient id="mpLogoGold" x1="17" y1="29" x2="47" y2="53">
-          <stop offset="0" stopColor="#d3ab85" />
-          <stop offset="1" stopColor="#a47650" />
+
+        <linearGradient id="mpLogoRight" gradientUnits="userSpaceOnUse" x1="56" y1="10" x2="40" y2="54">
+          <stop offset="0" stopColor="#8b3a48" />
+          <stop offset=".55" stopColor="#a8606a" />
+          <stop offset="1" stopColor="#c79c74" />
         </linearGradient>
       </defs>
 
-      <path
-        d="M8 53V10L23 31L32 16L41 31L56 10V53"
-        stroke="url(#mpLogoWine)"
-        strokeWidth="5.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+      <polygon
+        points="8,54 8,10 18,10 32,32 32,47 18,25 18,54"
+        fill="url(#mpLogoLeft)" stroke="url(#mpLogoLeft)"
+        strokeWidth="1.2" strokeLinejoin="round"
       />
-      <path
-        d="M17 53V36L23 43L32 29L41 43L47 36V53"
-        stroke="url(#mpLogoGold)"
-        strokeWidth="3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+      <polygon
+        points="56,54 56,10 46,10 32,32 32,47 46,25 46,54"
+        fill="url(#mpLogoRight)" stroke="url(#mpLogoRight)"
+        strokeWidth="1.2" strokeLinejoin="round"
       />
+      <polygon points="32,32 32,47 39,36" fill="#2a0711" opacity=".28" />
     </svg>
   );
 }
+
 
 function Icon({ name, size = 20 }) {
   const paths = {
