@@ -529,43 +529,43 @@ function PainelGeral({ navigate }) {
 
         <div className="relative z-10 flex flex-col items-end px-8 pb-5 pt-5 gap-3">
           <div
-            className="text-right uppercase leading-relaxed"
-            style={{
-              color: "#4b1823",
-              background: "rgba(255,251,245,0.89)",
-              border: "1px solid rgba(255,255,255,0.85)",
-              borderRadius: 12,
-              padding: "9px 15px",
-              fontSize: 11,
-              fontWeight: 700,
-              letterSpacing: "0.17em",
-              boxShadow: "0 5px 18px rgba(57,23,21,0.06)"
-            }}
-          >
-            Qualidade
-            <br />
-            em cada
-            <br />
-            detalhe
-          </div>
+  className="text-right text-xs font-semibold uppercase"
+  style={{
+    color: "#4b1823",
+    letterSpacing: "0.18em",
+    lineHeight: "1.7",
+    textShadow: "0 1px 3px rgba(255,255,255,0.9)",
+  }}
+>
+  Qualidade
+  <br />
+  em cada
+  <br />
+  detalhe
+</div>
 
-          <div
-            className="flex items-center gap-3 rounded-xl"
-            style={{
-              color: "#4b1823",
-              background: "rgba(255,251,245,0.87)",
-              border: "1px solid rgba(255,255,255,0.82)",
-              padding: "6px 10px"
-            }}
-          >
-            <span aria-label="Notificações" className="flex items-center justify-center w-7 h-7">
-              <IconBell />
-            </span>
-            <span style={{ color: "#ab9b90" }}>|</span>
-            <span aria-label="Perfil" className="w-8 h-8 rounded-full border flex items-center justify-center" style={{ borderColor: "#b48d83" }}>
-              <IconUser />
-            </span>
-          </div>
+        <div className="flex items-center gap-4">
+  <span
+    aria-label="Notificações"
+    className="flex items-center justify-center"
+    style={{ color: "#4b1823" }}
+  >
+    <IconBell />
+  </span>
+
+  <span style={{ color: "#ab9b90" }}>|</span>
+
+  <span
+    aria-label="Perfil"
+    className="w-9 h-9 rounded-full border flex items-center justify-center"
+    style={{
+      color: "#4b1823",
+      borderColor: "rgba(75,24,35,0.45)",
+    }}
+  >
+    <IconUser />
+  </span>
+</div>
         </div>
       </header>
 
