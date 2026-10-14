@@ -488,76 +488,83 @@ function PainelGeral({ navigate }) {
     <>
       <header
         className="painel-header-desktop relative items-end justify-between overflow-hidden"
-        style={{ minHeight: "140px" }}
+        style={{
+          minHeight: "172px",
+          flexShrink: 0,
+          background: "#f5f0eb",
+          borderBottom: "1px solid rgba(92,26,34,0.08)"
+        }}
       >
         <div
-          className="absolute right-0 top-0 h-full"
+          className="absolute right-0 top-0 h-full pointer-events-none"
           style={{
-            width: "55%",
+            width: "66%",
             backgroundImage: `url(${MARBLE_HERO})`,
             backgroundSize: "cover",
-            backgroundPosition: "center",
-            maskImage:
-              "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.6) 30%, #000 100%)",
-            WebkitMaskImage:
-              "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.6) 30%, #000 100%)"
+            backgroundPosition: "center 45%",
+            opacity: 0.88,
+            maskImage: "linear-gradient(to right, transparent 0%, #000 45%)",
+            WebkitMaskImage: "linear-gradient(to right, transparent 0%, #000 45%)"
           }}
         />
 
-        <div
-          className="absolute inset-0"
-          style={{
-            background: "#f5f0eb",
-            zIndex: -1
-          }}
-        />
-
-        <div className="relative z-10 px-8 pb-6 pt-8">
+        <div className="relative z-10 px-8 pb-7 pt-8">
+          <div style={{ width: 36, height: 2, background: "#c9976e", marginBottom: 15 }} />
           <h1
-            className="text-3xl font-bold mb-1"
-            style={{ color: "#1c0a0d" }}
+            className="text-3xl mb-2"
+            style={{
+              color: "#2c1017",
+              fontFamily: 'Georgia, "Times New Roman", serif',
+              fontWeight: 600,
+              fontSize: "clamp(29px, 2.5vw, 39px)",
+              letterSpacing: "-0.025em"
+            }}
           >
             Painel Geral
           </h1>
-
-          <p
-            className="text-sm"
-            style={{ color: "#7a5c60" }}
-          >
+          <p className="text-sm" style={{ color: "#5f4a4c" }}>
             Resumo das movimentações do dia
           </p>
         </div>
 
-        <div className="relative z-10 flex flex-col items-end px-8 pb-4 pt-4 gap-3">
+        <div className="relative z-10 flex flex-col items-end px-8 pb-5 pt-5 gap-3">
           <div
-            className="text-right text-xs font-bold tracking-widest uppercase leading-relaxed"
-            style={{ color: "#c9976e" }}
+            className="text-right uppercase leading-relaxed"
+            style={{
+              color: "#4b1823",
+              background: "rgba(255,251,245,0.89)",
+              border: "1px solid rgba(255,255,255,0.85)",
+              borderRadius: 12,
+              padding: "9px 15px",
+              fontSize: 11,
+              fontWeight: 700,
+              letterSpacing: "0.17em",
+              boxShadow: "0 5px 18px rgba(57,23,21,0.06)"
+            }}
           >
             Qualidade
             <br />
-            <span style={{ color: "#5c1a22" }}>
-              em cada
-            </span>
+            em cada
             <br />
-            Detalhe
+            detalhe
           </div>
 
-          <div className="flex items-center gap-3">
-            <button style={{ color: "#5c1a22" }}>
+          <div
+            className="flex items-center gap-3 rounded-xl"
+            style={{
+              color: "#4b1823",
+              background: "rgba(255,251,245,0.87)",
+              border: "1px solid rgba(255,255,255,0.82)",
+              padding: "6px 10px"
+            }}
+          >
+            <span aria-label="Notificações" className="flex items-center justify-center w-7 h-7">
               <IconBell />
-            </button>
-
-            <span style={{ color: "#999" }}>|</span>
-
-            <button
-              className="w-8 h-8 rounded-full border flex items-center justify-center"
-              style={{
-                borderColor: "#ccc",
-                color: "#5c1a22"
-              }}
-            >
+            </span>
+            <span style={{ color: "#ab9b90" }}>|</span>
+            <span aria-label="Perfil" className="w-8 h-8 rounded-full border flex items-center justify-center" style={{ borderColor: "#b48d83" }}>
               <IconUser />
-            </button>
+            </span>
           </div>
         </div>
       </header>
@@ -584,8 +591,8 @@ function PainelGeral({ navigate }) {
             {statCards.map((card) => (
               <div
                 key={card.label}
-                className="rounded-2xl p-4 flex flex-col gap-3"
-                style={{ background: "#fff" }}
+                className="rounded-2xl p-5 flex flex-col gap-4"
+                style={{ background: "linear-gradient(145deg,#fffdfb,#f8f3ee)", border: "1px solid #fff", boxShadow: "0 8px 25px rgba(67,37,32,0.055)" }}
               >
                 <div
                   className="w-10 h-10 rounded-xl flex items-center justify-center"
@@ -634,8 +641,8 @@ function PainelGeral({ navigate }) {
           </div>
 
           <div
-            className="rounded-2xl"
-            style={{ background: "#fff" }}
+            className="rounded-2xl overflow-hidden"
+            style={{ background: "#fffdfb", border: "1px solid #fff", boxShadow: "0 8px 25px rgba(67,37,32,0.055)" }}
           >
             <div
               className="flex items-center justify-between px-4 py-4 border-b"
@@ -655,8 +662,8 @@ function PainelGeral({ navigate }) {
                 </div>
 
                 <h2
-                  className="text-base font-bold"
-                  style={{ color: "#1c0a0d" }}
+                  className="text-xl font-semibold"
+                  style={{ color: "#2c1017", fontFamily: 'Georgia, "Times New Roman", serif' }}
                 >
                   Últimas Movimentações
                 </h2>
@@ -813,8 +820,8 @@ function PainelGeral({ navigate }) {
 
             <div>
               <p
-                className="text-sm italic"
-                style={{ color: "#5c1a22" }}
+                className="text-base italic"
+                style={{ color: "#5c1a22", fontFamily: 'Georgia, "Times New Roman", serif' }}
               >
                 "Mais que pedras, soluções para grandes projetos."
               </p>
@@ -832,7 +839,7 @@ function PainelGeral({ navigate }) {
         <div className="painel-right flex flex-col gap-4">
           <div
             className="rounded-2xl p-5"
-            style={{ background: "#fff" }}
+            style={{ background: "linear-gradient(145deg,#fffdfb,#f8f3ee)", border: "1px solid #fff", boxShadow: "0 8px 25px rgba(67,37,32,0.055)" }}
           >
             <div className="flex items-center gap-2 mb-4">
               <span style={{ color: "#c9976e" }}>
@@ -879,7 +886,7 @@ function PainelGeral({ navigate }) {
 
           <div
             className="rounded-2xl p-5 relative overflow-hidden"
-            style={{ background: "#fff" }}
+            style={{ background: "linear-gradient(145deg,#fffdfb,#f8f3ee)", border: "1px solid #fff", boxShadow: "0 8px 25px rgba(67,37,32,0.055)" }}
           >
             <div
               className="absolute bottom-0 right-0 w-24 h-24 rounded-tl-2xl overflow-hidden"
