@@ -606,24 +606,6 @@ export default function Auth({ onAuth }) {
           margin: 6px 0 0 5px;
         }
 
-        .auth-forgot {
-          display: flex;
-          justify-content: flex-end;
-          margin-top: -4px;
-          margin-bottom: 4px;
-        }
-
-        .auth-forgot button {
-          border: none;
-          background: transparent;
-          color: #78313e;
-          font-size: 13px;
-          text-decoration: underline;
-          text-underline-offset: 3px;
-          padding: 3px 0;
-          cursor: not-allowed;
-        }
-
         .auth-submit {
           width: 100%;
           min-height: 58px;
@@ -986,16 +968,6 @@ export default function Auth({ onAuth }) {
                   />
                 }
               />
-
-              <div className="auth-forgot">
-                <button
-                  type="button"
-                  disabled
-                  title="Recuperação de senha ainda não configurada"
-                >
-                  Esqueceu a senha?
-                </button>
-              </div>
 
               <button
                 type="submit"
