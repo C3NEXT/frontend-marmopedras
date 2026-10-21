@@ -1,3 +1,4 @@
+
 "use client";
 import { useState, useEffect } from "react";
 import { api } from "./api";
@@ -58,6 +59,25 @@ const IconLogout = () => (
     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
     <polyline points="16,17 21,12 16,7" />
     <line x1="21" y1="12" x2="9" y2="12" />
+  </svg>
+);
+const IconBell = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+    <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+  </svg>
+);
+const IconUser = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+    <circle cx="12" cy="8" r="4" />
+    <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+  </svg>
+);
+const IconAlert = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+    <line x1="12" y1="9" x2="12" y2="13" />
+    <line x1="12" y1="17" x2="12.01" y2="17" />
   </svg>
 );
 const IconFlash = () => (
@@ -463,26 +483,42 @@ function PainelGeral({ navigate }) {
           </p>
         </div>
         <div className="relative z-10 flex flex-col items-end px-8 pb-5 pt-5 gap-3">
-          <div
-            className="text-right uppercase"
-            style={{
-              color: "#3d0f16",
-              fontSize: "13px",
-              fontWeight: 800,
-              letterSpacing: "0.18em",
-              lineHeight: "1.9",
-              padding: "12px 16px",
-              background:
-                "linear-gradient(90deg, rgba(250,246,240,0), rgba(250,246,240,0.94))",
-              textShadow: "0 1px 1px rgba(255,255,255,0.8)",
-            }}
-          >
-            Qualidade
-            <br />
-            em cada
-            <br />
-            detalhe
-          </div>
+        <div
+  className="text-right uppercase"
+  style={{
+    color: "#3d0f16",
+    fontSize: "13px",
+    fontWeight: 800,
+    letterSpacing: "0.18em",
+    lineHeight: "1.9",
+    padding: "12px 16px",
+    background:
+      "linear-gradient(90deg, rgba(250,246,240,0), rgba(250,246,240,0.94))",
+    textShadow: "0 1px 1px rgba(255,255,255,0.8)",
+  }}
+>
+  Qualidade
+  <br />
+  em cada
+  <br />
+  detalhe
+</div>
+    style={{ color: "#4b1823" }}
+  >
+    <IconBell />
+  </span>
+  <span style={{ color: "#ab9b90" }}>|</span>
+  <span
+    aria-label="Perfil"
+    className="w-9 h-9 rounded-full border flex items-center justify-center"
+    style={{
+      color: "#4b1823",
+      borderColor: "rgba(75,24,35,0.45)",
+    }}
+  >
+    <IconUser />
+  </span>
+</div>
         </div>
       </header>
       <div className="painel-header-mobile px-4 pt-4 pb-3">
@@ -994,8 +1030,24 @@ export default function App() {
               Marmopedras
             </span>
           </div>
-          {/* Espaço reservado para manter centralização do logo */}
-          <div className="w-9" />
+          <div className="flex items-center gap-2">
+            <button
+              style={{
+                color: "rgba(255,255,255,0.7)"
+              }}
+            >
+              <IconBell />
+            </button>
+            <div
+              className="w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold"
+              style={{
+                background: "#c9976e",
+                color: "#fff"
+              }}
+            >
+              {iniciais(user?.nome)}
+            </div>
+          </div>
         </div>
         {activeNav !== "painel" && (
           <header className="flex items-center justify-between px-4 lg:px-8 pt-4 lg:pt-7 pb-3 lg:pb-5 flex-shrink-0">
@@ -1012,6 +1064,21 @@ export default function App() {
               >
                 {pageTitles[activeNav]?.sub}
               </p>
+            </div>
+            <div className="hidden lg:flex items-center gap-3">
+              <button style={{ color: "#5c1a22" }}>
+                <IconBell />
+              </button>
+              <span style={{ color: "#c4b5b8" }}>|</span>
+              <button
+                className="w-8 h-8 rounded-full border flex items-center justify-center"
+                style={{
+                  borderColor: "#d8cfc9",
+                  color: "#5c1a22"
+                }}
+              >
+                <IconUser />
+              </button>
             </div>
           </header>
         )}
@@ -1040,5 +1107,4 @@ export default function App() {
         </div>
       </main>
     </div>
-  );
-}
+
