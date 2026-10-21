@@ -1,7 +1,8 @@
-
 "use client";
+
 import { useState, useEffect } from "react";
 import { api } from "./api";
+
 import Auth from "./pages/Auth";
 import PesquisarMateriais from "./pages/PesquisarMateriais";
 import RegistrarEntrada from "./pages/RegistrarEntrada";
@@ -10,32 +11,38 @@ import Transferencia from "./pages/Transferencia";
 import DistribuicaoEstoque from "./pages/DistribuicaoEstoque";
 import HistoricoMovimentacoes from "./pages/HistoricoMovimentacoes";
 import { fmtCodigo, descMov } from "./constants";
+
 const IconBox = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
     <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
   </svg>
 );
+
 const IconSearch = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
     <circle cx="11" cy="11" r="8" />
     <path d="m21 21-4.35-4.35" />
   </svg>
 );
+
 const IconDown = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
     <path d="M12 5v14M5 12l7 7 7-7" />
   </svg>
 );
+
 const IconUp = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
     <path d="M12 19V5M5 12l7-7 7 7" />
   </svg>
 );
+
 const IconTransfer = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
     <path d="M17 2l4 4-4 4M3 11V7a4 4 0 0 1 4-4h11M7 22l-4-4 4-4M21 13v4a4 4 0 0 1-4 4H6" />
   </svg>
 );
+
 const IconDistrib = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
     <rect x="3" y="3" width="7" height="7" />
@@ -44,6 +51,7 @@ const IconDistrib = () => (
     <rect x="14" y="14" width="7" height="7" />
   </svg>
 );
+
 const IconHistory = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
     <line x1="8" y1="6" x2="21" y2="6" />
@@ -54,6 +62,7 @@ const IconHistory = () => (
     <line x1="3" y1="18" x2="3.01" y2="18" />
   </svg>
 );
+
 const IconLogout = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
@@ -61,18 +70,21 @@ const IconLogout = () => (
     <line x1="21" y1="12" x2="9" y2="12" />
   </svg>
 );
+
 const IconBell = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
     <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
     <path d="M13.73 21a2 2 0 0 1-3.46 0" />
   </svg>
 );
+
 const IconUser = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
     <circle cx="12" cy="8" r="4" />
     <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
   </svg>
 );
+
 const IconAlert = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
     <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
@@ -80,16 +92,19 @@ const IconAlert = () => (
     <line x1="12" y1="17" x2="12.01" y2="17" />
   </svg>
 );
+
 const IconFlash = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
     <polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2" />
   </svg>
 );
+
 const IconChevron = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <polyline points="9,18 15,12 9,6" />
   </svg>
 );
+
 const IconList = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
     <line x1="8" y1="6" x2="21" y2="6" />
@@ -100,6 +115,7 @@ const IconList = () => (
     <line x1="3" y1="18" x2="3.01" y2="18" />
   </svg>
 );
+
 const IconMenu = () => (
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
     <line x1="3" y1="6" x2="21" y2="6" />
@@ -107,12 +123,14 @@ const IconMenu = () => (
     <line x1="3" y1="18" x2="21" y2="18" />
   </svg>
 );
+
 const IconX = () => (
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
     <line x1="18" y1="6" x2="6" y2="18" />
     <line x1="6" y1="6" x2="18" y2="18" />
   </svg>
 );
+
 const navItems = [
   {
     id: "painel",
@@ -151,10 +169,13 @@ const navItems = [
     icon: <IconHistory />
   }
 ];
+
 const MARBLE_HERO =
   "https://images.unsplash.com/photo-1770065805058-3bfed55e23ee?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=1080";
+
 const MARBLE_SMALL =
   "https://images.unsplash.com/photo-1558346648-9757f2fa4474?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=400";
+
 const tipoBadge = (tipo) => {
   if (tipo === "Entrada") {
     return (
@@ -169,6 +190,7 @@ const tipoBadge = (tipo) => {
       </span>
     );
   }
+
   if (tipo === "Saída") {
     return (
       <span
@@ -182,6 +204,7 @@ const tipoBadge = (tipo) => {
       </span>
     );
   }
+
   return (
     <span
       className="px-2.5 py-0.5 rounded-full text-xs font-medium whitespace-nowrap"
@@ -194,6 +217,7 @@ const tipoBadge = (tipo) => {
     </span>
   );
 };
+
 const iniciais = (n) =>
   (n || "?")
     .split(" ")
@@ -201,6 +225,7 @@ const iniciais = (n) =>
     .slice(0, 2)
     .map((p) => p[0].toUpperCase())
     .join("");
+
 function NavList({
   activeNav,
   setActiveNav,
@@ -212,6 +237,7 @@ function NavList({
     setActiveNav(id);
     onSelect?.();
   };
+
   return (
     <>
       <div className="px-6 pt-8 pb-6">
@@ -241,6 +267,7 @@ function NavList({
               />
             </svg>
           </div>
+
           <div>
             <div
               className="text-base font-bold tracking-wide leading-tight"
@@ -248,6 +275,7 @@ function NavList({
             >
               Marmopedras
             </div>
+
             <div
               className="text-[9px] tracking-widest uppercase"
               style={{
@@ -258,6 +286,7 @@ function NavList({
             </div>
           </div>
         </div>
+
         <div
           className="mt-4 text-[10px] tracking-widest uppercase"
           style={{
@@ -275,6 +304,7 @@ function NavList({
           </span>
         </div>
       </div>
+
       <nav className="flex-1 px-3 overflow-y-auto">
         {navItems.map((item) => (
           <div key={item.id}>
@@ -288,6 +318,7 @@ function NavList({
                 {item.section}
               </div>
             )}
+
             <button
               onClick={() => handle(item.id)}
               className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all mb-0.5 text-left"
@@ -312,6 +343,7 @@ function NavList({
               >
                 {item.icon}
               </span>
+
               <span
                 className={
                   activeNav === item.id
@@ -325,6 +357,7 @@ function NavList({
           </div>
         ))}
       </nav>
+
       <div
         className="px-4 py-5 border-t"
         style={{
@@ -341,6 +374,7 @@ function NavList({
           >
             {iniciais(user?.nome)}
           </div>
+
           <div>
             <div
               className="text-sm font-medium"
@@ -348,6 +382,7 @@ function NavList({
             >
               {user?.nome}
             </div>
+
             <div
               className="text-xs"
               style={{
@@ -358,6 +393,7 @@ function NavList({
             </div>
           </div>
         </div>
+
         <button
           className="flex items-center gap-2 text-xs w-full hover:opacity-80 transition-opacity"
           style={{
@@ -372,15 +408,19 @@ function NavList({
     </>
   );
 }
+
 function PainelGeral({ navigate }) {
   const [dados, setDados] = useState(null);
+
   useEffect(() => {
     api("painel")
       .then(setDados)
       .catch(() => {});
   }, []);
+
   const c = dados?.cards || {};
   const movements = dados?.ultimasMovimentacoes || [];
+
   const statCards = [
     {
       icon: <IconBox />,
@@ -415,6 +455,7 @@ function PainelGeral({ navigate }) {
       alert: true
     }
   ];
+
   const acoes = [
     {
       label: "Registrar Entrada",
@@ -441,6 +482,7 @@ function PainelGeral({ navigate }) {
       active: false
     }
   ];
+
   return (
     <>
       <header
@@ -464,6 +506,7 @@ function PainelGeral({ navigate }) {
             WebkitMaskImage: "linear-gradient(to right, transparent 0%, #000 45%)"
           }}
         />
+
         <div className="relative z-10 px-8 pb-7 pt-8">
           <div style={{ width: 36, height: 2, background: "#c9976e", marginBottom: 15 }} />
           <h1
@@ -482,6 +525,7 @@ function PainelGeral({ navigate }) {
             Resumo das movimentações do dia
           </p>
         </div>
+
         <div className="relative z-10 flex flex-col items-end px-8 pb-5 pt-5 gap-3">
         <div
   className="text-right uppercase"
@@ -507,7 +551,9 @@ function PainelGeral({ navigate }) {
   >
     <IconBell />
   </span>
+
   <span style={{ color: "#ab9b90" }}>|</span>
+
   <span
     aria-label="Perfil"
     className="w-9 h-9 rounded-full border flex items-center justify-center"
@@ -521,6 +567,7 @@ function PainelGeral({ navigate }) {
 </div>
         </div>
       </header>
+
       <div className="painel-header-mobile px-4 pt-4 pb-3">
         <h1
           className="text-xl font-bold"
@@ -528,6 +575,7 @@ function PainelGeral({ navigate }) {
         >
           Painel Geral
         </h1>
+
         <p
           className="text-xs mt-0.5"
           style={{ color: "#7a5c60" }}
@@ -535,6 +583,7 @@ function PainelGeral({ navigate }) {
           Resumo das movimentações do dia
         </p>
       </div>
+
       <div className="flex-1 overflow-y-auto painel-content-padding painel-content-flex">
         <div className="painel-left flex flex-col gap-5">
           <div className="painel-stat-grid">
@@ -555,6 +604,7 @@ function PainelGeral({ navigate }) {
                 >
                   {card.icon}
                 </div>
+
                 <div>
                   <div
                     className="text-[10px] font-semibold tracking-widest uppercase mb-1"
@@ -566,6 +616,7 @@ function PainelGeral({ navigate }) {
                   >
                     {card.label}
                   </div>
+
                   <div
                     className="painel-stat-value font-bold leading-none mb-1"
                     style={{
@@ -576,6 +627,7 @@ function PainelGeral({ navigate }) {
                   >
                     {card.value}
                   </div>
+
                   <div
                     className="text-xs"
                     style={{ color: "#9b7e82" }}
@@ -586,6 +638,7 @@ function PainelGeral({ navigate }) {
               </div>
             ))}
           </div>
+
           <div
             className="rounded-2xl overflow-hidden"
             style={{ background: "#fffdfb", border: "1px solid #fff", boxShadow: "0 8px 25px rgba(67,37,32,0.055)" }}
@@ -606,6 +659,7 @@ function PainelGeral({ navigate }) {
                 >
                   <IconList />
                 </div>
+
                 <h2
                   className="text-xl font-semibold"
                   style={{ color: "#2c1017", fontFamily: 'Georgia, "Times New Roman", serif' }}
@@ -613,6 +667,7 @@ function PainelGeral({ navigate }) {
                   Últimas Movimentações
                 </h2>
               </div>
+
               <button
                 className="text-xs"
                 style={{ color: "#5c1a22" }}
@@ -621,6 +676,7 @@ function PainelGeral({ navigate }) {
                 Ver todos →
               </button>
             </div>
+
             <div className="painel-mov-table">
               <table className="w-full">
                 <thead>
@@ -646,6 +702,7 @@ function PainelGeral({ navigate }) {
                     ))}
                   </tr>
                 </thead>
+
                 <tbody>
                   {movements.map((row, i) => (
                     <tr
@@ -663,20 +720,24 @@ function PainelGeral({ navigate }) {
                       >
                         {row.hora}
                       </td>
+
                       <td className="px-6 py-4">
                         {tipoBadge(row.tipo)}
                       </td>
+
                       <td
                         className="px-6 py-4 text-xs font-mono font-semibold"
                         style={{ color: "#5c1a22" }}
                       >
                         {fmtCodigo(row.codigo ?? row.cod)}
                       </td>
+
                       <td
                         className="px-6 py-4 text-sm"
                         style={{ color: "#1c0a0d" }}
                       >
                         {row.material}
+
                         {descMov(row) && (
                           <div
                             className="text-[11px]"
@@ -686,6 +747,7 @@ function PainelGeral({ navigate }) {
                           </div>
                         )}
                       </td>
+
                       <td
                         className="px-6 py-4 text-sm text-right font-medium"
                         style={{ color: "#9b7e82" }}
@@ -697,6 +759,7 @@ function PainelGeral({ navigate }) {
                 </tbody>
               </table>
             </div>
+
             <div className="painel-mov-cards flex flex-col">
               {movements.map((row, i) => (
                 <div
@@ -716,7 +779,9 @@ function PainelGeral({ navigate }) {
                     >
                       {row.hora}
                     </span>
+
                     {tipoBadge(row.tipo)}
+
                     <span
                       className="text-xs truncate"
                       style={{ color: "#1c0a0d" }}
@@ -731,6 +796,7 @@ function PainelGeral({ navigate }) {
                       {row.material}
                     </span>
                   </div>
+
                   <span
                     className="text-xs font-semibold flex-shrink-0"
                     style={{ color: "#9b7e82" }}
@@ -741,6 +807,7 @@ function PainelGeral({ navigate }) {
               ))}
             </div>
           </div>
+
           <div className="flex items-start gap-3">
             <div
               className="w-1 rounded-full flex-shrink-0 mt-1"
@@ -749,6 +816,7 @@ function PainelGeral({ navigate }) {
                 height: "36px"
               }}
             />
+
             <div>
               <p
                 className="text-base italic"
@@ -756,6 +824,7 @@ function PainelGeral({ navigate }) {
               >
                 "Mais que pedras, soluções para grandes projetos."
               </p>
+
               <p
                 className="text-xs font-semibold mt-0.5"
                 style={{ color: "#9b7e82" }}
@@ -765,6 +834,7 @@ function PainelGeral({ navigate }) {
             </div>
           </div>
         </div>
+
         <div className="painel-right flex flex-col gap-4">
           <div
             className="rounded-2xl p-5"
@@ -774,6 +844,7 @@ function PainelGeral({ navigate }) {
               <span style={{ color: "#c9976e" }}>
                 <IconFlash />
               </span>
+
               <span
                 className="text-[11px] font-bold tracking-widest uppercase"
                 style={{ color: "#5c1a22" }}
@@ -781,6 +852,7 @@ function PainelGeral({ navigate }) {
                 Ações Rápidas
               </span>
             </div>
+
             <div className="painel-acoes-grid">
               {acoes.map((action) => (
                 <button
@@ -804,11 +876,13 @@ function PainelGeral({ navigate }) {
                     {action.icon}
                     {action.label}
                   </div>
+
                   <IconChevron />
                 </button>
               ))}
             </div>
           </div>
+
           <div
             className="rounded-2xl p-5 relative overflow-hidden"
             style={{ background: "linear-gradient(145deg,#fffdfb,#f8f3ee)", border: "1px solid #fff", boxShadow: "0 8px 25px rgba(67,37,32,0.055)" }}
@@ -822,11 +896,13 @@ function PainelGeral({ navigate }) {
                 opacity: 0.35
               }}
             />
+
             <div className="relative z-10">
               <div className="flex items-center gap-2 mb-4">
                 <span style={{ color: "#c0392b" }}>
                   <IconAlert />
                 </span>
+
                 <span
                   className="text-[11px] font-bold tracking-widest uppercase"
                   style={{ color: "#c0392b" }}
@@ -834,6 +910,7 @@ function PainelGeral({ navigate }) {
                   Materiais Críticos
                 </span>
               </div>
+
               <ul className="painel-criticos-grid gap-2 mb-4">
                 {(dados?.criticos || []).map((m) => (
                   <li
@@ -851,6 +928,7 @@ function PainelGeral({ navigate }) {
                         background: "#c0392b"
                       }}
                     />
+
                     {typeof m === "string"
                       ? m
                       : `${fmtCodigo(
@@ -859,6 +937,7 @@ function PainelGeral({ navigate }) {
                   </li>
                 ))}
               </ul>
+
               <button
                 className="text-sm font-medium"
                 style={{ color: "#5c1a22" }}
@@ -868,6 +947,7 @@ function PainelGeral({ navigate }) {
               </button>
             </div>
           </div>
+
           <div
             className="text-right text-xs"
             style={{ color: "#9b7e82" }}
@@ -879,6 +959,7 @@ function PainelGeral({ navigate }) {
     </>
   );
 }
+
 const pageTitles = {
   pesquisar: {
     title: "Pesquisar Materiais",
@@ -905,33 +986,41 @@ const pageTitles = {
     sub: "Registro completo de movimentações"
   }
 };
+
 export default function App() {
   const [user, setUser] = useState(null);
   const [checking, setChecking] = useState(true);
   const [activeNav, setActiveNav] = useState("painel");
   const [drawerOpen, setDrawerOpen] = useState(false);
+
   useEffect(() => {
     if (!localStorage.getItem("token")) {
       setChecking(false);
       return;
     }
+
     api("me")
       .then(setUser)
       .catch(() => localStorage.removeItem("token"))
       .finally(() => setChecking(false));
   }, []);
+
   if (checking) {
     return null;
   }
+
   if (!user) {
     return <Auth onAuth={setUser} />;
   }
+
   const navigate = (id) => setActiveNav(id);
+
   const logout = () => {
     localStorage.removeItem("token");
     setUser(null);
     setActiveNav("painel");
   };
+
   return (
     <div
       className="flex h-screen overflow-hidden font-sans"
@@ -951,6 +1040,7 @@ export default function App() {
           user={user}
         />
       </aside>
+
       {drawerOpen && (
         <div className="lg:hidden fixed inset-0 z-40 flex">
           <div
@@ -961,6 +1051,7 @@ export default function App() {
             }}
             onClick={() => setDrawerOpen(false)}
           />
+
           <div
             className="relative z-50 flex flex-col w-72 h-full overflow-hidden"
             style={{
@@ -979,6 +1070,7 @@ export default function App() {
             >
               <IconX />
             </button>
+
             <NavList
               activeNav={activeNav}
               setActiveNav={navigate}
@@ -989,6 +1081,7 @@ export default function App() {
           </div>
         </div>
       )}
+
       <main className="flex-1 flex flex-col overflow-hidden min-w-0">
         <div
           className="lg:hidden flex items-center justify-between px-4 py-3 flex-shrink-0"
@@ -1004,6 +1097,7 @@ export default function App() {
           >
             <IconMenu />
           </button>
+
           <div className="flex items-center gap-2">
             <svg width="20" height="20" viewBox="0 0 36 36" fill="none">
               <path
@@ -1023,6 +1117,7 @@ export default function App() {
                 fill="none"
               />
             </svg>
+
             <span
               className="text-sm font-bold"
               style={{ color: "#f0e4d4" }}
@@ -1030,6 +1125,7 @@ export default function App() {
               Marmopedras
             </span>
           </div>
+
           <div className="flex items-center gap-2">
             <button
               style={{
@@ -1038,6 +1134,7 @@ export default function App() {
             >
               <IconBell />
             </button>
+
             <div
               className="w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold"
               style={{
@@ -1049,6 +1146,7 @@ export default function App() {
             </div>
           </div>
         </div>
+
         {activeNav !== "painel" && (
           <header className="flex items-center justify-between px-4 lg:px-8 pt-4 lg:pt-7 pb-3 lg:pb-5 flex-shrink-0">
             <div>
@@ -1058,6 +1156,7 @@ export default function App() {
               >
                 {pageTitles[activeNav]?.title}
               </h1>
+
               <p
                 className="text-xs lg:text-sm"
                 style={{ color: "#7a5c60" }}
@@ -1065,11 +1164,14 @@ export default function App() {
                 {pageTitles[activeNav]?.sub}
               </p>
             </div>
+
             <div className="hidden lg:flex items-center gap-3">
               <button style={{ color: "#5c1a22" }}>
                 <IconBell />
               </button>
+
               <span style={{ color: "#c4b5b8" }}>|</span>
+
               <button
                 className="w-8 h-8 rounded-full border flex items-center justify-center"
                 style={{
@@ -1082,29 +1184,37 @@ export default function App() {
             </div>
           </header>
         )}
+
         <div className="flex-1 overflow-hidden flex flex-col min-h-0">
           {activeNav === "painel" && (
             <PainelGeral navigate={navigate} />
           )}
+
           {activeNav === "pesquisar" && (
             <PesquisarMateriais />
           )}
+
           {activeNav === "entrada" && (
             <RegistrarEntrada />
           )}
+
           {activeNav === "saida" && (
             <RegistrarSaida />
           )}
+
           {activeNav === "transferencia" && (
             <Transferencia />
           )}
+
           {activeNav === "distribuicao" && (
             <DistribuicaoEstoque />
           )}
+
           {activeNav === "historico" && (
             <HistoricoMovimentacoes />
           )}
         </div>
       </main>
     </div>
-
+  );
+}
