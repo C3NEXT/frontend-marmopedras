@@ -511,30 +511,6 @@ function PainelGeral({ navigate }) {
             Resumo das movimentações do dia
           </p>
         </div>
-
-      
-<div className="relative z-10 flex flex-col items-end px-8 pb-5 pt-5 gap-3">
-  <div
-    className="text-right uppercase"
-    style={{
-      color: "#3d0f16",
-      fontSize: "13px",
-      fontWeight: 800,
-      letterSpacing: "0.18em",
-      lineHeight: "1.9",
-      padding: "12px 16px",
-      background:
-        "linear-gradient(90deg, rgba(250,246,240,0), rgba(250,246,240,0.94))",
-      textShadow: "0 1px 1px rgba(255,255,255,0.8)",
-    }}
-  >
-    Qualidade
-    <br />
-    em cada
-    <br />
-    detalhe
-  </div>
-</div>
       </header>
 
       <div className="painel-header-mobile px-4 pt-4 pb-3">
@@ -776,32 +752,6 @@ function PainelGeral({ navigate }) {
               ))}
             </div>
           </div>
-
-          <div className="flex items-start gap-3">
-            <div
-              className="w-1 rounded-full flex-shrink-0 mt-1"
-              style={{
-                background: "#c9976e",
-                height: "36px"
-              }}
-            />
-
-            <div>
-              <p
-                className="text-base italic"
-                style={{ color: "#5c1a22", fontFamily: 'Georgia, "Times New Roman", serif' }}
-              >
-                "Mais que pedras, soluções para grandes projetos."
-              </p>
-
-              <p
-                className="text-xs font-semibold mt-0.5"
-                style={{ color: "#9b7e82" }}
-              >
-                Marmopedras
-              </p>
-            </div>
-          </div>
         </div>
 
         <div className="painel-right flex flex-col gap-4">
@@ -915,13 +865,6 @@ function PainelGeral({ navigate }) {
                 Ver todos →
               </button>
             </div>
-          </div>
-
-          <div
-            className="text-right text-xs"
-            style={{ color: "#9b7e82" }}
-          >
-            Powered by <strong>NEXT</strong> /
           </div>
         </div>
       </div>
