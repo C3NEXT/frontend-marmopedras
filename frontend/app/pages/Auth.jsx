@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { api } from "../api";
 import { IconCheck } from "../components/Icons";
@@ -366,18 +365,6 @@ export default function Auth({ onAuth }) {
           color: rgba(255, 246, 240, .8);
         }
 
-        .auth-powered {
-          margin-top: 20px;
-          font-size: 13px;
-          color: rgba(255,255,255,.57);
-        }
-
-        .auth-powered strong {
-          color: #f3e9df;
-          letter-spacing: .07em;
-          font-weight: 800;
-        }
-
         .auth-hero {
           max-width: 585px;
           padding-top: 30px;
@@ -663,21 +650,6 @@ export default function Auth({ onAuth }) {
           color: #958782;
         }
 
-        .auth-card-footer {
-          margin-top: 36px;
-          padding-top: 22px;
-          border-top: 1px solid rgba(194,181,173,.4);
-          text-align: center;
-          color: #968b86;
-          font-size: 12px;
-        }
-
-        .auth-card-footer strong {
-          font-weight: 800;
-          letter-spacing: .07em;
-          color: #37292b;
-        }
-
         .auth-success {
           display: flex;
           flex-direction: column;
@@ -853,10 +825,6 @@ export default function Auth({ onAuth }) {
 
           <div className="auth-brand-tag">
             PEDRAS QUE CONSTROEM HISTÓRIAS
-          </div>
-
-          <div className="auth-powered">
-            powered by <strong>NEXT</strong>
           </div>
         </header>
 
@@ -1130,10 +1098,6 @@ export default function Auth({ onAuth }) {
               </p>
             </div>
           )}
-
-          <footer className="auth-card-footer">
-            powered by <strong>NEXT</strong>
-          </footer>
         </div>
       </section>
     </main>
