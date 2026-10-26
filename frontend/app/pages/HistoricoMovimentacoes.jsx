@@ -179,9 +179,9 @@ export default function HistoricoMovimentacoes() {
                                     tipoFiltro === t
                                         ? { background: "#5c1a22", color: "#fff" }
                                         : {
-                                              background: "rgba(255,252,248,0.8)",
-                                              color: "#7a5c60",
-                                              border: "1px solid rgba(92,26,34,0.1)"
+                                            background: "rgba(255,252,248,0.8)",
+                                            color: "#7a5c60",
+                                            border: "1px solid rgba(92,26,34,0.1)"
                                           }
                                 }
                             >
@@ -416,9 +416,9 @@ export default function HistoricoMovimentacoes() {
                                         page === p
                                             ? { background: "#5c1a22", color: "#fff" }
                                             : {
-                                                  background: "rgba(255,252,248,0.8)",
-                                                  color: "#5c1a22",
-                                                  border: "1px solid rgba(92,26,34,0.12)"
+                                                background: "rgba(255,252,248,0.8)",
+                                                color: "#5c1a22",
+                                                border: "1px solid rgba(92,26,34,0.12)"
                                               }
                                     }
                                 >
@@ -441,24 +441,6 @@ export default function HistoricoMovimentacoes() {
                         </div>
                     </div>
                 )}
-            </div>
-
-            <div className="flex items-start gap-3 mt-auto">
-                <div
-                    className="w-0.5 rounded-full flex-shrink-0"
-                    style={{ background: "#c9976e", height: "36px" }}
-                />
-                <div>
-                    <p className="text-sm italic" style={{ color: "#5c1a22" }}>
-                        "Mais que pedras, soluções para grandes projetos."
-                    </p>
-                    <p
-                        className="text-xs font-semibold mt-0.5"
-                        style={{ color: "#9b7e82" }}
-                    >
-                        Marmopedras
-                    </p>
-                </div>
             </div>
         </div>
     );
