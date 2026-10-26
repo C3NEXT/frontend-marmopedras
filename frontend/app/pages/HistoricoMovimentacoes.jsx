@@ -65,23 +65,6 @@ export default function HistoricoMovimentacoes() {
 
     return (
         <div className="page-scroll flex-1 overflow-y-auto px-8 py-7 flex flex-col gap-6">
-            <div className="flex items-center gap-3">
-                <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center"
-                    style={{ background: "rgba(92,26,34,0.08)", color: "#5c1a22" }}
-                >
-                    <IconHistory size={18}/>
-                </div>
-                <div>
-                    <h1 className="text-2xl font-bold" style={{ color: "#1c0a0d" }}>
-                        Histórico de Movimentações
-                    </h1>
-                    <p className="text-sm" style={{ color: "#7a5c60" }}>
-                        Registro completo de entradas, saídas e transferências
-                    </p>
-                </div>
-            </div>
-
             <div className="grid grid-cols-3 gap-4">
                 {[
                     {
