@@ -80,7 +80,22 @@ export default function PesquisarMateriais() {
 
     return (
         <div className="page-scroll flex-1 overflow-y-auto px-8 py-7 flex flex-col gap-6">
-            <div className="flex items-center justify-end">
+            <div className="flex items-center justify-between">
+                <div>
+                    <p
+                        className="text-sm"
+                        style={{ color: "#7a5c60" }}
+                    >
+                        {materiais.length} materiais cadastrados ·{" "}
+                        {
+                            materiais.filter(
+                                (m) => m.status !== "ok"
+                            ).length
+                        }{" "}
+                        com atenção
+                    </p>
+                </div>
+
                 <div
                     className="flex items-center gap-2 text-xs font-medium"
                     style={{ color: "#9b7e82" }}
