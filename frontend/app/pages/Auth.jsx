@@ -150,6 +150,9 @@ export default function Auth({ onAuth }) {
   const [regPw2, setRegPw2] = useState("");
   const [regErrors, setRegErrors] = useState({});
 
+  const [verifyCode, setVerifyCode] = useState("");
+  const [verifyError, setVerifyError] = useState("");
+
   const cargos = [
     "Funcionário",
     "Gerente de Estoque",
@@ -158,7 +161,6 @@ export default function Auth({ onAuth }) {
     "Outro",
   ];
 
-  // Adicionada validação de token automática
   useEffect(() => {
     const validarToken = async () => {
       const token = localStorage.getItem("token");
@@ -180,77 +182,64 @@ export default function Auth({ onAuth }) {
 
   const validateLogin = () => {
     const errors = {};
-
     if (!loginEmail.trim()) {
       errors.email = "Informe o e-mail";
     } else if (!/\S+@\S+\.\S+/.test(loginEmail)) {
       errors.email = "E-mail inválido";
     }
-
     if (!loginPw) {
       errors.pw = "Informe a senha";
     } else if (loginPw.length < 6) {
       errors.pw = "Mínimo 6 caracteres";
     }
-
     return errors;
   };
 
   const validateRegister = () => {
     const errors = {};
-
     if (!regNome.trim()) {
       errors.nome = "Informe seu nome completo";
     }
-
     if (!regEmail.trim()) {
       errors.email = "Informe o e-mail";
     } else if (!/\S+@\S+\.\S+/.test(regEmail)) {
       errors.email = "E-mail inválido";
     }
-
     if (!regTel.trim()) {
       errors.tel = "Informe o telefone";
     }
-
     if (!regPw) {
       errors.pw = "Informe a senha";
     } else if (regPw.length < 6) {
       errors.pw = "Mínimo 6 caracteres";
     }
-
     if (regPw !== regPw2) {
       errors.pw2 = "As senhas não coincidem";
     }
-
     return errors;
   };
 
   const handleLogin = async (event) => {
     event.preventDefault();
-
     if (loading) return;
 
     const errors = validateLogin();
-
     if (Object.keys(errors).length > 0) {
       setLoginErrors(errors);
       return;
     }
 
     setLoading(true);
-
     try {
       const { token, usuario } = await api("login", {
         email: loginEmail,
         senha: loginPw,
       });
-
       localStorage.setItem("token", token);
       onAuth(usuario);
     } catch (error) {
       setLoginErrors({
-        pw: error.message || "Falha ao entrar",
+        pw: error.message || "Falha ao entrar. Verifique seus dados.",
       });
     } finally {
       setLoading(false);
@@ -259,18 +248,15 @@ export default function Auth({ onAuth }) {
 
   const handleRegister = async (event) => {
     event.preventDefault();
-
     if (loading) return;
 
     const errors = validateRegister();
-
     if (Object.keys(errors).length > 0) {
       setRegErrors(errors);
       return;
     }
 
     setLoading(true);
-
     try {
       await api("register", {
         nome: regNome,
@@ -279,9 +265,10 @@ export default function Auth({ onAuth }) {
         cargo: regCargo,
         senha: regPw,
       });
+      
+      setMode("verify");
     } catch (error) {
       const campos = error.campos || {};
-
       setRegErrors(
         error.campos
           ? {
@@ -293,27 +280,47 @@ export default function Auth({ onAuth }) {
               email: error.message || "Erro ao cadastrar",
             }
       );
-
+    } finally {
       setLoading(false);
+    }
+  };
+
+  const handleVerifyCode = async (event) => {
+    event.preventDefault();
+    if (loading) return;
+
+    if (!verifyCode.trim()) {
+      setVerifyError("Informe o código recebido.");
       return;
     }
 
-    setLoading(false);
-    setRegistered(true);
+    setLoading(true);
+    try {
+      await api("verify-email", {
+        email: regEmail,
+        codigo: verifyCode,
+      });
 
-    setTimeout(() => {
-      setRegistered(false);
-      setMode("login");
-      setLoginEmail(regEmail);
-    }, 2200);
+      setRegistered(true);
+      setTimeout(() => {
+        setRegistered(false);
+        setMode("login");
+        setLoginEmail(regEmail);
+        setVerifyCode(""); 
+      }, 2200);
+    } catch (error) {
+      setVerifyError(error.message || "Código inválido ou expirado.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const changeMode = (nextMode) => {
     if (loading) return;
-
     setMode(nextMode);
     setLoginErrors({});
     setRegErrors({});
+    setVerifyError("");
     setRegistered(false);
   };
 
@@ -670,6 +677,20 @@ export default function Auth({ onAuth }) {
           color: #958782;
         }
 
+        .auth-link-button {
+          background: none;
+          border: none;
+          color: #958782;
+          font-size: 13px;
+          cursor: pointer;
+          text-decoration: underline;
+          margin-top: 10px;
+        }
+
+        .auth-link-button:hover {
+          color: #5a1d29;
+        }
+
         .auth-success {
           display: flex;
           flex-direction: column;
@@ -700,28 +721,22 @@ export default function Auth({ onAuth }) {
           .marmopedras-login {
             grid-template-columns: 48% 52%;
           }
-
           .auth-left {
             padding: 35px;
           }
-
           .auth-headline {
             font-size: clamp(37px, 4vw, 50px);
           }
-
           .auth-features {
             gap: 9px;
           }
-
           .auth-feature {
             font-size: 11px;
             padding: 9px 11px;
           }
-
           .auth-right {
             padding: 30px;
           }
-
           .auth-card {
             padding: 35px;
           }
@@ -734,23 +749,19 @@ export default function Auth({ onAuth }) {
             background-size: cover;
             background-position: center;
           }
-
           .auth-left {
             min-height: auto;
             padding: 35px 28px 45px;
             background: rgba(48,11,19,.5);
           }
-
           .auth-hero {
             padding: 60px 0 25px;
           }
-
           .auth-right {
             min-height: auto;
             padding: 50px 20px;
             background: rgba(245,238,228,.22);
           }
-
           .auth-card {
             max-width: 600px;
           }
@@ -760,67 +771,52 @@ export default function Auth({ onAuth }) {
           .auth-left {
             padding: 28px 20px 35px;
           }
-
           .auth-brand-name {
             font-size: 29px;
           }
-
           .auth-brand-tag {
             font-size: 8px;
           }
-
           .auth-hero {
             padding-top: 45px;
           }
-
           .auth-headline {
             font-size: 36px;
           }
-
           .auth-description {
             font-size: 14px;
           }
-
           .auth-features {
             grid-template-columns: 1fr 1fr;
           }
-
           .auth-feature {
             white-space: normal;
             font-size: 11px;
           }
-
           .auth-right {
             padding: 35px 13px 50px;
           }
-
           .auth-card {
             padding: 28px 21px;
             border-radius: 20px;
           }
-
           .auth-tabs {
             margin-bottom: 32px;
           }
-
           .auth-tab {
             min-height: 45px;
             font-size: 13px;
           }
-
           .auth-title {
             font-size: 30px;
           }
-
           .auth-subtitle {
             font-size: 13px;
           }
-
           .auth-field,
           .auth-field input {
             min-height: 53px;
           }
-
           .auth-submit {
             min-height: 54px;
           }
@@ -838,19 +834,12 @@ export default function Auth({ onAuth }) {
       <section className="auth-left">
         <header className="auth-brand">
           <LogoM />
-
-          <div className="auth-brand-name">
-            Marmopedras
-          </div>
-
-          <div className="auth-brand-tag">
-            PEDRAS QUE CONSTROEM HISTÓRIAS
-          </div>
+          <div className="auth-brand-name">Marmopedras</div>
+          <div className="auth-brand-tag">PEDRAS QUE CONSTROEM HISTÓRIAS</div>
         </header>
 
         <div className="auth-hero">
           <span className="auth-accent-line" />
-
           <h2 className="auth-headline">
             Gestão completa
             <br />
@@ -858,11 +847,9 @@ export default function Auth({ onAuth }) {
             <br />
             pedras naturais.
           </h2>
-
           <p className="auth-description">
-            Gerencie entradas, saídas, transferências
-            e distribuição de materiais com elegância
-            e precisão.
+            Gerencie entradas, saídas, transferências e distribuição de materiais
+            com elegância e precisão.
           </p>
 
           <div className="auth-features">
@@ -887,36 +874,33 @@ export default function Auth({ onAuth }) {
 
       <section className="auth-right">
         <div className="auth-card">
-          <div className="auth-tabs" role="group" aria-label="Acesso">
-            <button
-              type="button"
-              className={`auth-tab ${mode === "login" ? "active" : ""}`}
-              aria-pressed={mode === "login"}
-              onClick={() => changeMode("login")}
-            >
-              Entrar
-            </button>
+          {mode !== "verify" && !registered && (
+            <div className="auth-tabs" role="group" aria-label="Acesso">
+              <button
+                type="button"
+                className={`auth-tab ${mode === "login" ? "active" : ""}`}
+                aria-pressed={mode === "login"}
+                onClick={() => changeMode("login")}
+              >
+                Entrar
+              </button>
 
-            <button
-              type="button"
-              className={`auth-tab ${mode === "register" ? "active" : ""}`}
-              aria-pressed={mode === "register"}
-              onClick={() => changeMode("register")}
-            >
-              Criar conta
-            </button>
-          </div>
+              <button
+                type="button"
+                className={`auth-tab ${mode === "register" ? "active" : ""}`}
+                aria-pressed={mode === "register"}
+                onClick={() => changeMode("register")}
+              >
+                Criar conta
+              </button>
+            </div>
+          )}
 
           {mode === "login" && (
             <form className="auth-form" onSubmit={handleLogin}>
               <div>
-                <h1 className="auth-title">
-                  Bem-vindo de volta
-                </h1>
-
-                <p className="auth-subtitle">
-                  Acesse sua conta Marmopedras
-                </p>
+                <h1 className="auth-title">Bem-vindo de volta</h1>
+                <p className="auth-subtitle">Acesse sua conta Marmopedras</p>
               </div>
 
               <Field
@@ -927,10 +911,7 @@ export default function Auth({ onAuth }) {
                 value={loginEmail}
                 onChange={(value) => {
                   setLoginEmail(value);
-                  setLoginErrors((prev) => ({
-                    ...prev,
-                    email: "",
-                  }));
+                  setLoginErrors((prev) => ({ ...prev, email: "" }));
                 }}
                 error={loginErrors.email}
               />
@@ -943,10 +924,7 @@ export default function Auth({ onAuth }) {
                 value={loginPw}
                 onChange={(value) => {
                   setLoginPw(value);
-                  setLoginErrors((prev) => ({
-                    ...prev,
-                    pw: "",
-                  }));
+                  setLoginErrors((prev) => ({ ...prev, pw: "" }));
                 }}
                 error={loginErrors.pw}
                 right={
@@ -957,11 +935,7 @@ export default function Auth({ onAuth }) {
                 }
               />
 
-              <button
-                type="submit"
-                className="auth-submit"
-                disabled={loading}
-              >
+              <button type="submit" className="auth-submit" disabled={loading}>
                 {loading ? "Entrando..." : "Entrar no sistema"}
                 {!loading && <Icon name="arrow" size={20} />}
               </button>
@@ -971,10 +945,7 @@ export default function Auth({ onAuth }) {
           {mode === "register" && !registered && (
             <form className="auth-form" onSubmit={handleRegister}>
               <div>
-                <h1 className="auth-title">
-                  Criar conta
-                </h1>
-
+                <h1 className="auth-title">Criar conta</h1>
                 <p className="auth-subtitle">
                   Preencha seus dados para solicitar acesso
                 </p>
@@ -987,10 +958,7 @@ export default function Auth({ onAuth }) {
                 value={regNome}
                 onChange={(value) => {
                   setRegNome(value);
-                  setRegErrors((prev) => ({
-                    ...prev,
-                    nome: "",
-                  }));
+                  setRegErrors((prev) => ({ ...prev, nome: "" }));
                 }}
                 error={regErrors.nome}
               />
@@ -1003,10 +971,7 @@ export default function Auth({ onAuth }) {
                 value={regEmail}
                 onChange={(value) => {
                   setRegEmail(value);
-                  setRegErrors((prev) => ({
-                    ...prev,
-                    email: "",
-                  }));
+                  setRegErrors((prev) => ({ ...prev, email: "" }));
                 }}
                 error={regErrors.email}
               />
@@ -1019,10 +984,7 @@ export default function Auth({ onAuth }) {
                 value={regTel}
                 onChange={(value) => {
                   setRegTel(value);
-                  setRegErrors((prev) => ({
-                    ...prev,
-                    tel: "",
-                  }));
+                  setRegErrors((prev) => ({ ...prev, tel: "" }));
                 }}
                 error={regErrors.tel}
               />
@@ -1034,7 +996,6 @@ export default function Auth({ onAuth }) {
                 onChange={(e) => setRegCargo(e.target.value)}
               >
                 <option value="">Selecione seu cargo</option>
-
                 {cargos.map((cargo) => (
                   <option key={cargo} value={cargo}>
                     {cargo}
@@ -1050,10 +1011,7 @@ export default function Auth({ onAuth }) {
                 value={regPw}
                 onChange={(value) => {
                   setRegPw(value);
-                  setRegErrors((prev) => ({
-                    ...prev,
-                    pw: "",
-                  }));
+                  setRegErrors((prev) => ({ ...prev, pw: "" }));
                 }}
                 error={regErrors.pw}
                 right={
@@ -1072,10 +1030,7 @@ export default function Auth({ onAuth }) {
                 value={regPw2}
                 onChange={(value) => {
                   setRegPw2(value);
-                  setRegErrors((prev) => ({
-                    ...prev,
-                    pw2: "",
-                  }));
+                  setRegErrors((prev) => ({ ...prev, pw2: "" }));
                 }}
                 error={regErrors.pw2}
                 right={
@@ -1086,11 +1041,7 @@ export default function Auth({ onAuth }) {
                 }
               />
 
-              <button
-                type="submit"
-                className="auth-submit"
-                disabled={loading}
-              >
+              <button type="submit" className="auth-submit" disabled={loading}>
                 {loading ? "Cadastrando..." : "Solicitar acesso"}
                 {!loading && <Icon name="arrow" size={20} />}
               </button>
@@ -1101,18 +1052,55 @@ export default function Auth({ onAuth }) {
             </form>
           )}
 
-          {mode === "register" && registered && (
+          {mode === "verify" && !registered && (
+            <form className="auth-form" onSubmit={handleVerifyCode}>
+              <div style={{ textAlign: "center", marginBottom: "10px" }}>
+                <h1 className="auth-title" style={{ fontSize: "28px" }}>
+                  Verifique seu e-mail
+                </h1>
+                <p className="auth-subtitle" style={{ margin: "10px 0" }}>
+                  Enviamos um código de confirmação para:<br/>
+                  <strong>{regEmail}</strong>
+                </p>
+              </div>
+
+              <Field
+                icon="lock"
+                placeholder="Digite o código"
+                type="text"
+                value={verifyCode}
+                onChange={(value) => {
+                  setVerifyCode(value);
+                  setVerifyError("");
+                }}
+                error={verifyError}
+              />
+
+              <button type="submit" className="auth-submit" disabled={loading}>
+                {loading ? "Verificando..." : "Confirmar Conta"}
+                {!loading && <Icon name="arrow" size={20} />}
+              </button>
+
+              <button
+                type="button"
+                className="auth-link-button"
+                onClick={() => changeMode("login")}
+              >
+                Voltar para o Login
+              </button>
+            </form>
+          )}
+
+          {registered && (
             <div className="auth-success" role="status">
               <div className="auth-success-icon">
                 <IconCheck size={28} />
               </div>
 
-              <h2 className="auth-title">
-                Conta criada!
-              </h2>
+              <h2 className="auth-title">Conta ativada!</h2>
 
               <p>
-                Seu cadastro foi realizado com sucesso.
+                Seu e-mail foi confirmado com sucesso.
                 <br />
                 Redirecionando para o login...
               </p>
