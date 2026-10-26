@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { api } from "../api";
 import {
@@ -226,34 +225,6 @@ export default function Transferencia() {
           onClose={() => setSuccess(false)}
         />
       )}
-
-      <div className="flex items-center gap-3">
-        <div
-          className="w-10 h-10 rounded-xl flex items-center justify-center"
-          style={{
-            background: "rgba(92,26,34,0.08)",
-            color: "#5c1a22"
-          }}
-        >
-          <IconTransfer size={18} />
-        </div>
-
-        <div>
-          <h1
-            className="text-2xl font-bold"
-            style={{ color: "#1c0a0d" }}
-          >
-            Transferência / Localização
-          </h1>
-
-          <p
-            className="text-sm"
-            style={{ color: "#7a5c60" }}
-          >
-            Transfira chapas entre locais do estoque
-          </p>
-        </div>
-      </div>
 
       <div className="flex flex-col lg:flex-row gap-6">
         <form
