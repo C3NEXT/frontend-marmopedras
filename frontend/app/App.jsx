@@ -261,15 +261,6 @@ function NavList({
             >
               Marmopedras
             </div>
-
-            <div
-              className="text-[9px] tracking-widest uppercase"
-              style={{
-                color: "rgba(255,255,255,0.45)"
-              }}
-            >
-              Pedras que constroem histórias
-            </div>
           </div>
         </div>
 
