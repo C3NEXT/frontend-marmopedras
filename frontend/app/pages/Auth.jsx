@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { api } from "../api";
 import { IconCheck } from "../components/Icons";
 
@@ -157,6 +157,26 @@ export default function Auth({ onAuth }) {
     "Administrador",
     "Outro",
   ];
+
+  // Adicionada validação de token automática
+  useEffect(() => {
+    const validarToken = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      setLoading(true);
+      try {
+        const { usuario } = await api("me");
+        onAuth(usuario);
+      } catch (error) {
+        localStorage.removeItem("token");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    validarToken();
+  }, [onAuth]);
 
   const validateLogin = () => {
     const errors = {};
