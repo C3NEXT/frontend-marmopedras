@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { api } from "../api";
 import {
@@ -182,34 +181,6 @@ export default function RegistrarSaida() {
           onClose={() => setSuccess(false)}
         />
       )}
-
-      <div className="flex items-center gap-3">
-        <div
-          className="w-10 h-10 rounded-xl flex items-center justify-center"
-          style={{
-            background: "rgba(185,28,28,0.07)",
-            color: "#b91c1c"
-          }}
-        >
-          <IconUp size={18} />
-        </div>
-
-        <div>
-          <h1
-            className="text-2xl font-bold"
-            style={{ color: "#1c0a0d" }}
-          >
-            Registrar Saída
-          </h1>
-
-          <p
-            className="text-sm"
-            style={{ color: "#7a5c60" }}
-          >
-            Registre a saída de chapas do estoque
-          </p>
-        </div>
-      </div>
 
       <div className="flex gap-6 flex-wrap">
         <form
