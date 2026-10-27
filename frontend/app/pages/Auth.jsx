@@ -132,10 +132,11 @@ function EyeButton({ visible, onClick }) {
 }
 
 export default function Auth({ onAuth }) {
-  const [mode, setMode] = useState("login");
+  const [mode, setMode] = useState("login"); // login | register | verify | forgot | forgot-verify | forgot-reset
   const [showPw, setShowPw] = useState(false);
   const [showPw2, setShowPw2] = useState(false);
   const [registered, setRegistered] = useState(false);
+  const [successMsg, setSuccessMsg] = useState("");
   const [loading, setLoading] = useState(false);
 
   const [loginEmail, setLoginEmail] = useState("");
@@ -152,6 +153,13 @@ export default function Auth({ onAuth }) {
 
   const [verifyCode, setVerifyCode] = useState("");
   const [verifyError, setVerifyError] = useState("");
+
+  // Estados da recuperação de senha
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [forgotCode, setForgotCode] = useState("");
+  const [forgotPw, setForgotPw] = useState("");
+  const [forgotPw2, setForgotPw2] = useState("");
+  const [forgotError, setForgotError] = useState("");
 
   const cargos = [
     "Funcionário",
@@ -301,6 +309,7 @@ export default function Auth({ onAuth }) {
         codigo: verifyCode,
       });
 
+      setSuccessMsg("Seu e-mail foi confirmado com sucesso.");
       setRegistered(true);
       setTimeout(() => {
         setRegistered(false);
@@ -315,14 +324,98 @@ export default function Auth({ onAuth }) {
     }
   };
 
+  const handleForgotRequest = async (event) => {
+    event.preventDefault();
+    if (loading) return;
+
+    if (!forgotEmail.trim() || !/\S+@\S+\.\S+/.test(forgotEmail)) {
+      setForgotError("Informe um e-mail válido.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await api("forgot-password", { email: forgotEmail });
+      setForgotError("");
+      setMode("forgot-verify");
+    } catch (error) {
+      setForgotError(error.message || "Erro ao solicitar recuperação.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleForgotVerify = async (event) => {
+    event.preventDefault();
+    if (loading) return;
+
+    if (!forgotCode.trim()) {
+      setForgotError("Informe o código de recuperação.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await api("verify-reset-code", { email: forgotEmail, codigo: forgotCode });
+      setForgotError("");
+      setMode("forgot-reset");
+    } catch (error) {
+      setForgotError(error.message || "Código inválido.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleForgotReset = async (event) => {
+    event.preventDefault();
+    if (loading) return;
+
+    if (forgotPw.length < 6) {
+      setForgotError("A nova senha deve ter no mínimo 6 caracteres.");
+      return;
+    }
+    if (forgotPw !== forgotPw2) {
+      setForgotError("As senhas não coincidem.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await api("reset-password", { 
+        email: forgotEmail, 
+        codigo: forgotCode, 
+        novaSenha: forgotPw 
+      });
+      
+      setSuccessMsg("Sua senha foi redefinida com sucesso.");
+      setRegistered(true);
+      
+      setTimeout(() => {
+        setRegistered(false);
+        setMode("login");
+        setLoginEmail(forgotEmail);
+        setForgotCode("");
+        setForgotPw("");
+        setForgotPw2("");
+      }, 2200);
+    } catch (error) {
+      setForgotError(error.message || "Erro ao redefinir a senha.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const changeMode = (nextMode) => {
     if (loading) return;
     setMode(nextMode);
     setLoginErrors({});
     setRegErrors({});
     setVerifyError("");
+    setForgotError("");
     setRegistered(false);
   };
+
+  const isBaseMode = mode === "login" || mode === "register";
 
   return (
     <main
@@ -691,6 +784,23 @@ export default function Auth({ onAuth }) {
           color: #5a1d29;
         }
 
+        .auth-forgot-link {
+          background: none;
+          border: none;
+          color: #9c8983;
+          font-size: 13px;
+          cursor: pointer;
+          text-align: right;
+          padding: 0;
+          margin-top: -5px;
+          align-self: flex-end;
+        }
+        
+        .auth-forgot-link:hover {
+          color: #5a1d29;
+          text-decoration: underline;
+        }
+
         .auth-success {
           display: flex;
           flex-direction: column;
@@ -874,7 +984,8 @@ export default function Auth({ onAuth }) {
 
       <section className="auth-right">
         <div className="auth-card">
-          {mode !== "verify" && !registered && (
+          
+          {isBaseMode && !registered && (
             <div className="auth-tabs" role="group" aria-label="Acesso">
               <button
                 type="button"
@@ -934,6 +1045,14 @@ export default function Auth({ onAuth }) {
                   />
                 }
               />
+              
+              <button
+                type="button"
+                className="auth-forgot-link"
+                onClick={() => changeMode("forgot")}
+              >
+                Esqueci minha senha
+              </button>
 
               <button type="submit" className="auth-submit" disabled={loading}>
                 {loading ? "Entrando..." : "Entrar no sistema"}
@@ -1091,16 +1210,147 @@ export default function Auth({ onAuth }) {
             </form>
           )}
 
+          {mode === "forgot" && !registered && (
+            <form className="auth-form" onSubmit={handleForgotRequest}>
+              <div style={{ textAlign: "center", marginBottom: "10px" }}>
+                <h1 className="auth-title" style={{ fontSize: "28px" }}>
+                  Recuperar Senha
+                </h1>
+                <p className="auth-subtitle" style={{ margin: "10px 0" }}>
+                  Informe o seu e-mail de cadastro.
+                </p>
+              </div>
+
+              <Field
+                icon="mail"
+                placeholder="E-mail"
+                type="email"
+                value={forgotEmail}
+                onChange={(value) => {
+                  setForgotEmail(value);
+                  setForgotError("");
+                }}
+                error={forgotError}
+              />
+
+              <button type="submit" className="auth-submit" disabled={loading}>
+                {loading ? "Enviando..." : "Enviar código de recuperação"}
+                {!loading && <Icon name="arrow" size={20} />}
+              </button>
+
+              <button
+                type="button"
+                className="auth-link-button"
+                onClick={() => changeMode("login")}
+              >
+                Cancelar e voltar
+              </button>
+            </form>
+          )}
+
+          {mode === "forgot-verify" && !registered && (
+            <form className="auth-form" onSubmit={handleForgotVerify}>
+              <div style={{ textAlign: "center", marginBottom: "10px" }}>
+                <h1 className="auth-title" style={{ fontSize: "28px" }}>
+                  Código de Segurança
+                </h1>
+                <p className="auth-subtitle" style={{ margin: "10px 0" }}>
+                  Digite o código que enviamos para o e-mail: <br/>
+                  <strong>{forgotEmail}</strong>
+                </p>
+              </div>
+
+              <Field
+                icon="lock"
+                placeholder="Código recebido"
+                type="text"
+                value={forgotCode}
+                onChange={(value) => {
+                  setForgotCode(value);
+                  setForgotError("");
+                }}
+                error={forgotError}
+              />
+
+              <button type="submit" className="auth-submit" disabled={loading}>
+                {loading ? "Verificando..." : "Confirmar Código"}
+                {!loading && <Icon name="arrow" size={20} />}
+              </button>
+
+              <button
+                type="button"
+                className="auth-link-button"
+                onClick={() => changeMode("login")}
+              >
+                Cancelar
+              </button>
+            </form>
+          )}
+
+          {mode === "forgot-reset" && !registered && (
+            <form className="auth-form" onSubmit={handleForgotReset}>
+              <div style={{ textAlign: "center", marginBottom: "10px" }}>
+                <h1 className="auth-title" style={{ fontSize: "28px" }}>
+                  Nova Senha
+                </h1>
+                <p className="auth-subtitle" style={{ margin: "10px 0" }}>
+                  Crie uma nova senha para sua conta.
+                </p>
+              </div>
+
+              <Field
+                icon="lock"
+                placeholder="Nova Senha (mín. 6 caracteres)"
+                type={showPw ? "text" : "password"}
+                value={forgotPw}
+                onChange={(value) => {
+                  setForgotPw(value);
+                  setForgotError("");
+                }}
+                error={forgotError}
+                right={
+                  <EyeButton
+                    visible={showPw}
+                    onClick={() => setShowPw((prev) => !prev)}
+                  />
+                }
+              />
+
+              <Field
+                icon="lock"
+                placeholder="Confirmar Nova Senha"
+                type={showPw2 ? "text" : "password"}
+                value={forgotPw2}
+                onChange={(value) => {
+                  setForgotPw2(value);
+                  setForgotError("");
+                }}
+                error={forgotError}
+                right={
+                  <EyeButton
+                    visible={showPw2}
+                    onClick={() => setShowPw2((prev) => !prev)}
+                  />
+                }
+              />
+
+              <button type="submit" className="auth-submit" disabled={loading}>
+                {loading ? "Salvando..." : "Redefinir Senha"}
+                {!loading && <Icon name="arrow" size={20} />}
+              </button>
+            </form>
+          )}
+
           {registered && (
             <div className="auth-success" role="status">
               <div className="auth-success-icon">
                 <IconCheck size={28} />
               </div>
 
-              <h2 className="auth-title">Conta ativada!</h2>
+              <h2 className="auth-title">Sucesso!</h2>
 
               <p>
-                Seu e-mail foi confirmado com sucesso.
+                {successMsg}
                 <br />
                 Redirecionando para o login...
               </p>
