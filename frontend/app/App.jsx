@@ -71,14 +71,6 @@ const IconLogout = () => (
   </svg>
 );
 
-const IconAlert = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-    <line x1="12" y1="9" x2="12" y2="13" />
-    <line x1="12" y1="17" x2="12.01" y2="17" />
-  </svg>
-);
-
 const IconFlash = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
     <polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2" />
@@ -158,9 +150,6 @@ const navItems = [
 
 const MARBLE_HERO =
   "https://images.unsplash.com/photo-1770065805058-3bfed55e23ee?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=1080";
-
-const MARBLE_SMALL =
-  "https://images.unsplash.com/photo-1558346648-9757f2fa4474?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=400";
 
 const tipoBadge = (tipo) => {
   if (tipo === "Entrada") {
@@ -422,14 +411,6 @@ function PainelGeral({ navigate }) {
       sub: `para ${c.obrasHoje ?? 0} obras distintas`,
       color: "#5c1a22",
       alert: false
-    },
-    {
-      icon: <IconAlert />,
-      label: "SALDO BAIXO",
-      value: String(c.saldoBaixo ?? "—"),
-      sub: "abaixo do mínimo",
-      color: "#c0392b",
-      alert: true
     }
   ];
 
@@ -522,7 +503,7 @@ function PainelGeral({ navigate }) {
 
       <div className="flex-1 overflow-y-auto painel-content-padding painel-content-flex">
         <div className="painel-left flex flex-col gap-5">
-          <div className="painel-stat-grid">
+          <div className="painel-stat-grid grid grid-cols-1 md:grid-cols-3 gap-4">
             {statCards.map((card) => (
               <div
                 key={card.label}
@@ -554,7 +535,7 @@ function PainelGeral({ navigate }) {
                   </div>
 
                   <div
-                    className="painel-stat-value font-bold leading-none mb-1"
+                    className="painel-stat-value font-bold leading-none mb-1 text-2xl"
                     style={{
                       color: card.alert
                         ? "#c0392b"
@@ -613,7 +594,7 @@ function PainelGeral({ navigate }) {
               </button>
             </div>
 
-            <div className="painel-mov-table">
+            <div className="painel-mov-table hidden md:block">
               <table className="w-full">
                 <thead>
                   <tr
@@ -696,7 +677,7 @@ function PainelGeral({ navigate }) {
               </table>
             </div>
 
-            <div className="painel-mov-cards flex flex-col">
+            <div className="painel-mov-cards flex flex-col md:hidden">
               {movements.map((row, i) => (
                 <div
                   key={i}
@@ -763,7 +744,7 @@ function PainelGeral({ navigate }) {
               </span>
             </div>
 
-            <div className="painel-acoes-grid">
+            <div className="painel-acoes-grid flex flex-col gap-2">
               {acoes.map((action) => (
                 <button
                   key={action.label}
@@ -790,71 +771,6 @@ function PainelGeral({ navigate }) {
                   <IconChevron />
                 </button>
               ))}
-            </div>
-          </div>
-
-          <div
-            className="rounded-2xl p-5 relative overflow-hidden"
-            style={{ background: "linear-gradient(145deg,#fffdfb,#f8f3ee)", border: "1px solid #fff", boxShadow: "0 8px 25px rgba(67,37,32,0.055)" }}
-          >
-            <div
-              className="absolute bottom-0 right-0 w-24 h-24 rounded-tl-2xl overflow-hidden"
-              style={{
-                backgroundImage: `url(${MARBLE_SMALL})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                opacity: 0.35
-              }}
-            />
-
-            <div className="relative z-10">
-              <div className="flex items-center gap-2 mb-4">
-                <span style={{ color: "#c0392b" }}>
-                  <IconAlert />
-                </span>
-
-                <span
-                  className="text-[11px] font-bold tracking-widest uppercase"
-                  style={{ color: "#c0392b" }}
-                >
-                  Materiais Críticos
-                </span>
-              </div>
-
-              <ul className="painel-criticos-grid gap-2 mb-4">
-                {(dados?.criticos || []).map((m) => (
-                  <li
-                    key={
-                      typeof m === "string"
-                        ? m
-                        : (m.cod ?? m.codigo ?? m.nome)
-                    }
-                    className="flex items-center gap-2 text-sm"
-                    style={{ color: "#1c0a0d" }}
-                  >
-                    <span
-                      className="w-2 h-2 rounded-full flex-shrink-0"
-                      style={{
-                        background: "#c0392b"
-                      }}
-                    />
-
-                    {typeof m === "string"
-                      ? m
-                      : `${fmtCodigo(
-                          m.cod ?? m.codigo
-                        )} · ${m.nome}`}
-                  </li>
-                ))}
-              </ul>
-
-              <button
-                className="text-sm font-medium"
-                style={{ color: "#5c1a22" }}
-                onClick={() => navigate("pesquisar")}
-              >
-                Ver todos →
-              </button>
             </div>
           </div>
         </div>
