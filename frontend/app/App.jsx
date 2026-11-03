@@ -62,6 +62,12 @@ const IconHistory = () => (
     <line x1="3" y1="18" x2="3.01" y2="18" />
   </svg>
 );
+const IconPlanta = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+    <rect x="3" y="3" width="18" height="18" rx="2" />
+    <path d="M3 9h18M9 9v12M15 9v12" />
+  </svg>
+);
 
 const IconLogout = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
@@ -145,7 +151,12 @@ const navItems = [
     id: "historico",
     label: "Histórico de Movimentações",
     icon: <IconHistory />
-  }
+  },
+  {
+  id: "planta",
+  label: "Planta do Estoque",
+  icon: <IconPlanta />
+}
 ];
 
 const MARBLE_HERO =
@@ -803,7 +814,11 @@ const pageTitles = {
   historico: {
     title: "Histórico de Movimentações",
     sub: "Registro completo de movimentações"
-  }
+  },
+  planta: {
+  title: "Planta do Estoque",
+  sub: "Visualização da organização física dos materiais"
+}
 };
 
 export default function App() {
@@ -994,6 +1009,25 @@ export default function App() {
           {activeNav === "historico" && (
             <HistoricoMovimentacoes />
           )}
+          {activeNav === "planta" && (
+  <div className="flex-1 flex items-center justify-center p-6">
+    <div className="text-center">
+      <h2
+        className="text-2xl font-semibold mb-2"
+        style={{
+          color: "#5c1a22",
+          fontFamily: 'Georgia, "Times New Roman", serif'
+        }}
+      >
+        Planta do Estoque
+      </h2>
+
+      <p style={{ color: "#9b7e82" }}>
+        A planta do estoque será integrada aqui.
+      </p>
+    </div>
+  </div>
+)}
         </div>
       </main>
     </div>
