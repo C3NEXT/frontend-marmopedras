@@ -160,8 +160,7 @@ const navItems = [
 }
 ];
 
-const MARBLE_HERO =
-  "https://images.unsplash.com/photo-1770065805058-3bfed55e23ee?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=1080";
+const MARBLE_HERO = "/marmopedras-fundo-login.jpg";
 
 const tipoBadge = (tipo) => {
   if (tipo === "Entrada") {
