@@ -1013,7 +1013,7 @@ export default function App() {
        {activeNav === "planta" && (
   <PlantaEstoque />
 )}
-)}
+          
         </div>
       </main>
     </div>
