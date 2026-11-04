@@ -124,7 +124,12 @@
 
 .pagina .planta-wrapper {
   width: 100%;
-  overflow: auto;
+  max-height: calc(100vh - 220px); 
+  overflow: auto;                  
+  border: 1px solid #eae2df;
+  border-radius: 12px;
+  background-color: #faf8f5;
+  position: relative;
 }
 
 .pagina .planta {
