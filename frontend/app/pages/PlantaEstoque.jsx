@@ -241,16 +241,6 @@ export default function PlantaEstoque() {
 
   return (
     <main className="pagina">
-      <header className="cabecalho">
-        <div>
-          <span className="subtitulo">MARMOPEDRAS</span>
-          <h1>Planejamento de Depósitos</h1>
-          <p>Organize os cavaletes e planeje o espaço do estoque.</p>
-        </div>
-
-        <span className="etiqueta">Planta Interativa Dos Depósitos</span>
-      </header>
-
       <section className="painel">
         <div className="barra">
           <div className="depositos">
