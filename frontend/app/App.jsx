@@ -10,6 +10,7 @@ import RegistrarSaida from "./pages/RegistrarSaida";
 import Transferencia from "./pages/Transferencia";
 import DistribuicaoEstoque from "./pages/DistribuicaoEstoque";
 import HistoricoMovimentacoes from "./pages/HistoricoMovimentacoes";
+import PlantaEstoque from "./pages/PlantaEstoque";
 import { fmtCodigo, descMov } from "./constants";
 
 const IconBox = () => (
@@ -1009,24 +1010,9 @@ export default function App() {
           {activeNav === "historico" && (
             <HistoricoMovimentacoes />
           )}
-          {activeNav === "planta" && (
-  <div className="flex-1 flex items-center justify-center p-6">
-    <div className="text-center">
-      <h2
-        className="text-2xl font-semibold mb-2"
-        style={{
-          color: "#5c1a22",
-          fontFamily: 'Georgia, "Times New Roman", serif'
-        }}
-      >
-        Planta do Estoque
-      </h2>
-
-      <p style={{ color: "#9b7e82" }}>
-        A planta do estoque será integrada aqui.
-      </p>
-    </div>
-  </div>
+       {activeNav === "planta" && (
+  <PlantaEstoque />
+)}
 )}
         </div>
       </main>
