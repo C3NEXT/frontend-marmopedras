@@ -741,6 +741,16 @@ export default function Auth({ onAuth }) {
           transform: translateY(-2px);
           box-shadow: 0 12px 22px rgba(125,81,50,.2);
         }
+        
+        .auth-submit-login:hover:not(:disabled) {
+        background: linear-gradient(115deg, #681c26, #52131e);
+        color: #ffffff;
+        }
+
+        .auth-submit-register:hover:not(:disabled) {
+        background: linear-gradient(115deg, #681c26, #52131e);
+        color: #ffffff;
+        }
 
         .auth-submit:disabled {
           cursor: wait;
@@ -1054,7 +1064,7 @@ export default function Auth({ onAuth }) {
                 Esqueci minha senha
               </button>
 
-              <button type="submit" className="auth-submit" disabled={loading}>
+              <button type="submit" className="auth-submit auth-submit-login" disabled={loading}>
                 {loading ? "Entrando..." : "Entrar no sistema"}
                 {!loading && <Icon name="arrow" size={20} />}
               </button>
@@ -1160,7 +1170,7 @@ export default function Auth({ onAuth }) {
                 }
               />
 
-              <button type="submit" className="auth-submit" disabled={loading}>
+              <button type="submit" className="auth-submit auth-submit-register" disabled={loading}>
                 {loading ? "Cadastrando..." : "Solicitar acesso"}
                 {!loading && <Icon name="arrow" size={20} />}
               </button>
